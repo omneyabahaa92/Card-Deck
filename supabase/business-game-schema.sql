@@ -4,6 +4,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.bgm_members (
   id uuid primary key default gen_random_uuid(),
+  auth_user_id uuid unique references auth.users(id) on delete cascade,
   display_name text not null check (char_length(trim(display_name)) between 2 and 60),
   whatsapp_phone text not null,
   created_at timestamptz not null default now(),
@@ -109,6 +110,7 @@ set search_path = public
 as $$
 declare v_member public.bgm_members%rowtype;
 begin
+  if auth.uid() is null then raise exception 'Please start a participant session first'; end if;
   if length(trim(coalesce(p_display_name,''))) < 2 or length(trim(coalesce(p_display_name,''))) > 60 then
     raise exception 'Please enter a display name between 2 and 60 characters';
   end if;
@@ -116,10 +118,8 @@ begin
     raise exception 'Please enter a valid WhatsApp number';
   end if;
 
-  insert into public.bgm_members(display_name, whatsapp_phone)
-  values (trim(p_display_name), regexp_replace(p_whatsapp_phone, '[^0-9+]', '', 'g'))
-  on conflict (whatsapp_phone) do update
-    set display_name = excluded.display_name, is_active = true
+  insert into public.bgm_members(auth_user_id, display_name, whatsapp_phone)
+  values (auth.uid(), trim(p_display_name), regexp_replace(p_whatsapp_phone, '[^0-9+]', '', 'g'))
   returning * into v_member;
 
   return jsonb_build_object('member_id', v_member.id, 'display_name', v_member.display_name);
@@ -149,7 +149,7 @@ begin
   if not found then raise exception 'This question is not active'; end if;
   select * into v_set from public.bgm_challenge_sets where id = v_q.challenge_set_id;
 
-  if not exists(select 1 from public.bgm_members where id = p_member_id and is_active = true) then
+  if not exists(select 1 from public.bgm_members where id = p_member_id and auth_user_id = auth.uid() and is_active = true) then
     raise exception 'Please register before answering';
   end if;
 
