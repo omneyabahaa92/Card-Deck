@@ -235,6 +235,18 @@ begin
   end if;
   if nullif(trim(p_expert_skill),'') is null then raise exception 'Expert skill is required'; end if;
 
+  if exists (
+    select 1 from public.bgm_challenge_sets s
+    where s.challenge_date = p_challenge_date
+      and (s.starts_at <= now() or exists (
+        select 1 from public.bgm_questions q
+        join public.bgm_answers a on a.question_id = q.id
+        where q.challenge_set_id = s.id
+      ))
+  ) then
+    raise exception 'Cannot replace a challenge that has started or received answers';
+  end if;
+
   v_start := ((p_challenge_date::timestamp + time '12:00') at time zone 'Africa/Cairo');
   v_end := (((p_challenge_date + 1)::timestamp + time '12:00') at time zone 'Africa/Cairo');
 
