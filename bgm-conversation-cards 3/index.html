@@ -454,7 +454,7 @@ function applyQuestLanguage(lang){
 }
 function openQuest(){stopQuickfire();document.body.classList.remove('deck-open');document.body.classList.add('quest-open');window.scrollTo({top:0,behavior:'smooth'});applyQuestLanguage(language);}
 function closeQuest(){document.body.classList.remove('quest-open');if(selected)document.body.classList.add('deck-open');else document.body.classList.remove('deck-open');window.scrollTo({top:0,behavior:'smooth'});}
-qel('questLaunch').addEventListener('click',()=>{document.getElementById("bgmGamePanel").scrollIntoView({behavior:"smooth",block:"start"});});qel('questClose').addEventListener('click',closeQuest);
+qel('questClose').addEventListener('click',closeQuest);
 qel('questSubmit').addEventListener('click',()=>{
  if(questSelected===null||questAnswered)return;
  const c=questCases[questIndex];questAnswered=true;
