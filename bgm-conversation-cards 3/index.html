@@ -63,6 +63,27 @@ body.quest-open .quest-panel{margin-top:0}
 @media(max-width:560px){.quest-teaser{grid-template-columns:1fr}.quest-launch{width:100%}.quest-path{gap:5px}.quest-step{padding:8px 3px;font-size:9px}.quest-stats{gap:6px}.quest-stat{padding:10px 8px}.quest-stat strong{font-size:19px}.quest-head{flex-direction:column}.quest-close{align-self:flex-start}.quest-actions{flex-direction:column}}
 
 
+/* BGM Member Survey door + form */
+.bgm-survey-door{display:inline-flex;align-items:center;gap:6px;border:1px solid #b94b68;border-radius:999px;padding:7px 10px;background:#260e18;color:#ffe5e9;font-size:10px;font-weight:900;white-space:nowrap;box-shadow:0 0 12px #8f123222}
+.bgm-survey-door:hover{background:#4a1428;border-color:#ffb9c8}
+.bgm-survey-panel{margin:22px 0 30px;border:1px solid #8d5570;border-radius:22px;padding:clamp(17px,4vw,28px);background:radial-gradient(circle at 100% 0%,#4a1930,transparent 46%),linear-gradient(145deg,#1e0e16,#10080b);color:var(--cream)}
+.bgm-survey-panel[hidden]{display:none!important}
+.bgm-survey-open .bgm-survey-panel{display:block!important;margin-top:0}
+.bgm-survey-open .hero,.bgm-survey-open #sectionLabel,.bgm-survey-open #decks,.bgm-survey-open #miniDecks,.bgm-survey-open #cardWrap,.bgm-survey-open #quickfireBar,.bgm-survey-open #controls,.bgm-survey-open #toast,.bgm-survey-open #footerNote,.bgm-survey-open .quest-panel,.bgm-survey-open .bgm-game-panel{display:none!important}
+.bgm-survey-open .bgm-survey-panel[hidden]{display:block!important}
+.bgm-survey-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.bgm-survey-head h2{font-size:clamp(25px,5vw,36px);margin:8px 0;letter-spacing:-1px}
+.bgm-survey-head p{margin:0;color:#d9c5c9;font-size:13px;line-height:1.55;max-width:580px}
+.bgm-survey-form{max-width:540px;margin:22px auto 4px;padding:clamp(16px,4vw,24px);border:1px solid #704052;border-radius:17px;background:#fff2df;color:#210c12}
+.bgm-survey-form label{display:block;font-size:12px;font-weight:850;margin:12px 0 6px}
+.bgm-survey-form input{width:100%;border:1px solid #d4bbc2;border-radius:10px;padding:13px;font:inherit;background:#fffaf4;color:#32131e}
+.bgm-survey-privacy{font-size:11px;line-height:1.5;color:#755c62;margin:12px 0}
+.bgm-survey-form .btn{width:100%;margin-top:5px}
+.bgm-survey-status{font-size:12px;line-height:1.5;color:#7b1835;margin-top:12px;overflow-wrap:anywhere}
+.bgm-survey-setup{margin-top:12px;padding:12px;border:1px solid #714052;border-radius:10px;color:#ffd28c;font-size:12px;line-height:1.5}
+[dir=rtl] .bgm-survey-head{direction:rtl}
+@media(max-width:650px){.bgm-survey-door{font-size:9px;padding:7px 9px}.bgm-survey-head{flex-direction:column}.bgm-survey-head .bgm-game-close{align-self:flex-start}}
+
 /* BGM Business Growth Game — uses the existing card-deck visual language */
 .bgm-game-panel{display:none;margin:22px 0 30px;border:1px solid #8d5570;border-radius:22px;padding:clamp(15px,3vw,25px);background:radial-gradient(circle at 100% 0%,#4a1930,transparent 46%),linear-gradient(145deg,#1e0e16,#10080b);color:var(--cream)}
 .bgm-game-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.bgm-game-top h2{font-size:clamp(24px,5vw,35px);margin:8px 0;letter-spacing:-1px}.bgm-game-top p{color:#d9c5c9;font-size:13px;line-height:1.5;margin:0}.bgm-game-langs{display:flex;gap:4px;padding:4px;border:1px solid #9f5266;border-radius:999px;background:#210d15;flex-shrink:0}.bgm-game-langs button{border:0;border-radius:999px;padding:7px 10px;background:transparent;color:#f6dce2;font-size:11px;font-weight:900}.bgm-game-langs button[aria-pressed=true]{background:#a7193f;color:white}
@@ -90,7 +111,7 @@ body.quest-open .quest-panel{margin-top:0}
       <div class="brand-mark">BGM</div>
       <div><div class="brand-name">BGM</div><div class="brand-sub">MEETUP</div></div>
     </div>
-    <div class="top-tools"><button class="bgm-game-door" id="bgmGameDoor" type="button">↗ <span id="bgmGameDoorLabel">Join Daily Challenge</span></button><div class="edition" id="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div><div class="language-switch" role="group" aria-label="Language"><button class="lang-btn" id="langEn" type="button" aria-pressed="true">EN</button><button class="lang-btn" id="langAr" type="button" aria-pressed="false">عربي</button></div></div>
+    <div class="top-tools"><button class="bgm-game-door" id="bgmGameDoor" type="button">↗ <span id="bgmGameDoorLabel">Join Daily Challenge</span></button><button class="bgm-survey-door" id="bgmSurveyDoor" type="button">↗ <span id="bgmSurveyDoorLabel">Member Survey</span></button><div class="edition" id="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div><div class="language-switch" role="group" aria-label="Language"><button class="lang-btn" id="langEn" type="button" aria-pressed="true">EN</button><button class="lang-btn" id="langAr" type="button" aria-pressed="false">عربي</button></div></div>
   </header>
   <section class="hero">
     <div class="eyebrow" id="eyebrow">GOOD CONVERSATIONS. REAL CONNECTIONS.</div>
@@ -127,6 +148,17 @@ body.quest-open .quest-panel{margin-top:0}
     <div class="bgm-game-leaderboard"><div><div class="quest-kicker">THIS WEEK</div><h3 id="bgmGameLeaderboardTitle">Weekly leaderboard</h3><p id="bgmGamePrivacy">WhatsApp numbers are private and are not shown on the leaderboard.</p></div><div class="bgm-game-podium" id="bgmGameTopThree">—</div><div id="bgmGameLeaderboard"></div></div>
     <div class="bgm-game-footnote">Organizer setup required before public launch · Supabase configuration is not yet connected.</div>
   </section>
+  <section class="bgm-survey-panel" id="bgmSurveyPanel" aria-labelledby="bgmSurveyTitle" hidden>
+    <div class="bgm-survey-head"><div><div class="quest-kicker">BGM · MEMBER SURVEY</div><h2 id="bgmSurveyTitle">Join the BGM member list</h2><p id="bgmSurveyIntro">Share your name and WhatsApp number so we can connect with you about BGM activities.</p></div><button class="bgm-game-close" id="bgmSurveyClose" type="button">← Back to cards</button></div>
+    <form id="bgmSurveyForm" class="bgm-survey-form">
+      <label for="bgmSurveyName" id="bgmSurveyNameLabel">Name</label><input id="bgmSurveyName" name="name" type="text" maxlength="100" autocomplete="name" required />
+      <label for="bgmSurveyPhone" id="bgmSurveyPhoneLabel">WhatsApp number</label><input id="bgmSurveyPhone" name="whatsapp" type="tel" maxlength="30" autocomplete="tel" placeholder="+20..." required />
+      <p class="bgm-survey-privacy" id="bgmSurveyPrivacy">Your WhatsApp number is for BGM follow-up and won't be displayed publicly.</p>
+      <button class="btn btn-primary" id="bgmSurveySubmit" type="submit">Submit</button><div class="bgm-survey-status" id="bgmSurveyStatus" role="status" aria-live="polite"></div>
+    </form>
+    <div class="bgm-survey-setup" id="bgmSurveySetup" hidden>Survey saving isn't configured yet. The organizer needs to connect the Google Sheets endpoint in the page settings.</div>
+  </section>
+
   <section class="quest-panel" id="questPanel" aria-live="polite">
     <div class="quest-head"><div><div class="quest-kicker" id="questKicker">BGM LEARNING LAB</div><h2 id="questTitle">Business Quest</h2><p id="questIntro">Learn by making decisions. Earn XP for progress, not just clicks.</p></div><button class="quest-close" id="questClose" type="button">← Back to cards</button></div>
     <div class="quest-stats"><div class="quest-stat"><strong id="questXP">0</strong><span id="questXPLabel">TOTAL XP</span></div><div class="quest-stat"><strong id="questProgress">0/5</strong><span id="questProgressLabel">CHALLENGES COMPLETE</span></div><div class="quest-stat"><strong id="questLevel">Explorer</strong><span id="questLevelLabel">CURRENT LEVEL</span></div></div>
@@ -351,6 +383,15 @@ function applyLanguage(lang){
  document.getElementById('heroTitle').innerHTML=tr('title');
  document.getElementById('heroCopy').textContent=tr('hero');
  document.getElementById('sectionLabel').textContent=tr('section');
+ document.getElementById('bgmGameDoorLabel').textContent=lang==='ar'?'شارك في تحدي النهارده':'Join Daily Challenge';
+ document.getElementById('bgmSurveyDoorLabel').textContent=lang==='ar'?'استبيان الأعضاء':'Member Survey';
+ document.getElementById('bgmSurveyTitle').textContent=lang==='ar'?'انضم لقائمة أعضاء BGM':'Join the BGM member list';
+ document.getElementById('bgmSurveyIntro').textContent=lang==='ar'?'سجّل اسمك ورقم WhatsApp عشان نقدر نتواصل معاك بخصوص أنشطة BGM.':'Share your name and WhatsApp number so we can connect with you about BGM activities.';
+ document.getElementById('bgmSurveyClose').textContent=lang==='ar'?'← ارجع للكروت':'← Back to cards';
+ document.getElementById('bgmSurveyNameLabel').textContent=lang==='ar'?'الاسم':'Name';
+ document.getElementById('bgmSurveyPhoneLabel').textContent=lang==='ar'?'رقم WhatsApp':'WhatsApp number';
+ document.getElementById('bgmSurveyPrivacy').textContent=lang==='ar'?'رقم WhatsApp هيُستخدم للتواصل بخصوص أنشطة BGM ومش هيظهر للعامة.':'Your WhatsApp number is for BGM follow-up and won’t be displayed publicly.';
+ document.getElementById('bgmSurveySubmit').textContent=lang==='ar'?'إرسال':'Submit';
  drawBtn.textContent=tr('draw'); resetBtn.textContent=tr('shuffle'); document.getElementById('backBtn').textContent=tr('back');
  document.getElementById('footerNote').innerHTML=tr('footer');
  document.getElementById('quickfireToggle').textContent=quickfireEnabled?tr('quickfireOn'):tr('quickfireOff');
@@ -474,6 +515,12 @@ qel('questNext').addEventListener('click',()=>{
 });
 qel('questReplay').addEventListener('click',()=>{questIndex=0;questSelected=null;questAnswered=false;renderQuestChallenge();});
 
+const BGM_SURVEY_ENDPOINT = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+function openBgmSurvey(){stopQuickfire();document.body.classList.remove('deck-open','quest-open','bgm-game-open');document.body.classList.add('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=false;document.getElementById('bgmSurveyStatus').textContent='';document.getElementById('bgmSurveySetup').hidden=/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT)===false;document.getElementById('bgmSurveyPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function closeBgmSurvey(){document.body.classList.remove('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=true;if(selected)document.body.classList.add('deck-open');window.scrollTo({top:0,behavior:'smooth'});}
+document.getElementById('bgmSurveyDoor').addEventListener('click',openBgmSurvey);
+document.getElementById('bgmSurveyClose').addEventListener('click',closeBgmSurvey);
+document.getElementById('bgmSurveyForm').addEventListener('submit',async function(event){event.preventDefault();const status=document.getElementById('bgmSurveyStatus'),submit=document.getElementById('bgmSurveySubmit');const name=document.getElementById('bgmSurveyName').value.trim(),whatsapp=document.getElementById('bgmSurveyPhone').value.trim();if(!name||!whatsapp){status.textContent=language==='ar'?'اكتب الاسم ورقم WhatsApp الأول.':'Please enter both your name and WhatsApp number.';return;}if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT)){status.textContent=language==='ar'?'الفورم لسه محتاج ربط بـ Google Sheets من إعدادات المنظّم.':'This form still needs to be connected to Google Sheets by the organizer.';document.getElementById('bgmSurveySetup').hidden=false;return;}submit.disabled=true;status.textContent=language==='ar'?'جاري الإرسال…':'Submitting…';try{const body=new URLSearchParams({name,whatsapp,source:'BGM Conversation Cards',submittedAt:new Date().toISOString()});await fetch(BGM_SURVEY_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});status.textContent=language==='ar'?'تم إرسال بياناتك، شكرًا!':'Submitted — thank you!';this.reset();}catch(error){status.textContent=language==='ar'?'ما قدرناش نبعت البيانات. جرّب تاني.':'Could not submit right now. Please try again.';}finally{submit.disabled=false;}});
 renderDecks();applyLanguage('en');
 </script>
 <script src="bgm-business-game.js"></script>
