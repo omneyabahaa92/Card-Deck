@@ -200,3 +200,83 @@ grant execute on function public.bgm_get_active_challenge(timestamptz) to anon, 
 grant execute on function public.bgm_register_member(text,text) to anon, authenticated;
 grant execute on function public.bgm_submit_answer(uuid,uuid,smallint) to anon, authenticated;
 grant execute on function public.bgm_get_leaderboard(date) to anon, authenticated;
+
+
+-- Organizer publishing permissions. Add approved Supabase Auth user UUIDs to this table
+-- from the SQL Editor; never let the public client grant itself admin access.
+create table if not exists public.bgm_admins (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.bgm_admins enable row level security;
+revoke all on public.bgm_admins from anon, authenticated;
+
+create or replace function public.bgm_admin_publish_set(
+  p_challenge_date date,
+  p_expert_skill text,
+  p_questions jsonb
+) returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_set public.bgm_challenge_sets%rowtype;
+  v_q jsonb;
+  v_count integer;
+  v_start timestamptz;
+  v_end timestamptz;
+begin
+  if auth.uid() is null or not exists(select 1 from public.bgm_admins where user_id = auth.uid()) then
+    raise exception 'Organizer access required';
+  end if;
+  if jsonb_typeof(p_questions) <> 'array' or jsonb_array_length(p_questions) <> 10 then
+    raise exception 'Exactly ten questions are required';
+  end if;
+  if nullif(trim(p_expert_skill),'') is null then raise exception 'Expert skill is required'; end if;
+
+  v_start := ((p_challenge_date::timestamp + time '12:00') at time zone 'Africa/Cairo');
+  v_end := (((p_challenge_date + 1)::timestamp + time '12:00') at time zone 'Africa/Cairo');
+
+  insert into public.bgm_challenge_sets(challenge_date, starts_at, ends_at, expert_skill, is_published)
+  values (p_challenge_date, v_start, v_end, trim(p_expert_skill), false)
+  on conflict (challenge_date) do update set
+    starts_at = excluded.starts_at, ends_at = excluded.ends_at,
+    expert_skill = excluded.expert_skill, is_published = false
+  returning * into v_set;
+
+  delete from public.bgm_questions where challenge_set_id = v_set.id;
+
+  for v_q in select value from jsonb_array_elements(p_questions)
+  loop
+    if coalesce(length(trim(v_q->>'prompt_en')),0) = 0
+       or coalesce(length(trim(v_q->>'prompt_ar')),0) = 0
+       or jsonb_typeof(v_q->'options_en') <> 'array'
+       or jsonb_typeof(v_q->'options_ar') <> 'array'
+       or jsonb_array_length(v_q->'options_en') <> 4
+       or jsonb_array_length(v_q->'options_ar') <> 4
+       or coalesce((v_q->>'correct_option')::integer,-1) not between 0 and 3
+       or coalesce(length(trim(v_q->>'explanation_en')),0) = 0
+       or coalesce(length(trim(v_q->>'explanation_ar')),0) = 0 then
+      raise exception 'Each question needs bilingual prompts, four options per language, a correct_option (0–3), and bilingual explanations';
+    end if;
+    insert into public.bgm_questions(
+      challenge_set_id, position, skill_category, prompt_en, prompt_ar,
+      options_en, options_ar, correct_option, explanation_en, explanation_ar, points
+    ) values (
+      v_set.id, (v_q->>'position')::smallint, trim(v_q->>'skill_category'),
+      trim(v_q->>'prompt_en'), trim(v_q->>'prompt_ar'),
+      v_q->'options_en', v_q->'options_ar', (v_q->>'correct_option')::smallint,
+      trim(v_q->>'explanation_en'), trim(v_q->>'explanation_ar'),
+      coalesce((v_q->>'points')::integer,10)
+    );
+  end loop;
+
+  select count(*) into v_count from public.bgm_questions where challenge_set_id = v_set.id;
+  if v_count <> 10 then raise exception 'Question set was incomplete'; end if;
+  update public.bgm_challenge_sets set is_published = true where id = v_set.id;
+  return jsonb_build_object('published',true,'challenge_date',p_challenge_date,'starts_at',v_start,'ends_at',v_end,'question_count',v_count);
+end;
+$$;
+revoke all on function public.bgm_admin_publish_set(date,text,jsonb) from public, anon;
+grant execute on function public.bgm_admin_publish_set(date,text,jsonb) to authenticated;
