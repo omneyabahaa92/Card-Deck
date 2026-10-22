@@ -125,7 +125,7 @@
     $("bgmGameTopThree").textContent=rows.length?rows.slice(0,3).map((r,i)=>(i+1)+". "+r.display_name+" — "+r.points+" XP").join("  •  "):"—";
   }
   function init() {
-    $("bgmGameEn").addEventListener("click",()=>setLanguage("en"));$("bgmGameAr").addEventListener("click",()=>setLanguage("ar"));\n    $("bgmGameDoor").addEventListener("click",()=>{document.body.classList.add("bgm-game-open");$("bgmGamePanel").scrollIntoView({behavior:"smooth",block:"start"});});\n    $("bgmGameClose").addEventListener("click",()=>{document.body.classList.remove("bgm-game-open");window.scrollTo({top:0,behavior:"smooth"});});
+    $("bgmGameEn").addEventListener("click",()=>setLanguage("en"));$("bgmGameAr").addEventListener("click",()=>setLanguage("ar"));\n    $("bgmGameDoor").addEventListener("click",()=>{document.body.classList.remove("bgm-survey-open","quest-open");const survey=document.getElementById("bgmSurveyPanel");if(survey)survey.hidden=true;document.body.classList.add("bgm-game-open");$("bgmGamePanel").scrollIntoView({behavior:"smooth",block:"start"});});\n    $("bgmGameClose").addEventListener("click",()=>{document.body.classList.remove("bgm-game-open");window.scrollTo({top:0,behavior:"smooth"});});
     $("bgmGameJoin").addEventListener("click",register);$("bgmGameSubmit").addEventListener("click",submitAnswer);
     $("bgmGameNext").addEventListener("click",()=>{if(state.index<state.questions.length-1){state.index++;state.selected=null;state.answered=false;renderQuestion();}else{status(t("done"));$("bgmGameQuestionArea").hidden=true;}});
     try { const m=JSON.parse(localStorage.getItem("bgmGameMember")||"null");if(m&&m.member_id){state.member=m;$("bgmGameRegister").hidden=true;$("bgmGameMemberLabel").textContent=m.display_name;} }catch(e){}
