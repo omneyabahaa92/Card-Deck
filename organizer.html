@@ -41,7 +41,7 @@ Use two questions each across Customer Discovery, Sales, Marketing, Strategy, an
     showSession(data.session);
   }
   function showSession(session){
-    $('loginPanel').classList.toggle('hidden',!!session);
+    $('loginPanel').querySelector('.row').classList.toggle('hidden',!!session);$('signIn').hidden=!!session;
     $('publishPanel').classList.toggle('hidden',!session);
     $('signOut').hidden=!session;
     if(session){say('loginStatus','Signed in as '+session.user.email);}
