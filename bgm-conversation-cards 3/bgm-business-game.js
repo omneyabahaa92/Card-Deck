@@ -101,6 +101,8 @@
     const name=$("bgmGameName").value.trim(),phone=$("bgmGamePhone").value.trim();
     if(!name||!phone||!$("bgmGameConsent").checked){status(t("error"));return;}
     try {
+      const {data:sessionData}=await state.client.auth.getSession();
+      if(!sessionData.session){const {error:authError}=await state.client.auth.signInAnonymously();if(authError)throw authError;}
       const {data,error}=await state.client.rpc("bgm_register_member",{p_display_name:name,p_whatsapp_phone:phone});
       if(error)throw error;
       state.member=data; localStorage.setItem("bgmGameMember",JSON.stringify(data));
@@ -127,8 +129,21 @@
     $("bgmGameJoin").addEventListener("click",register);$("bgmGameSubmit").addEventListener("click",submitAnswer);
     $("bgmGameNext").addEventListener("click",()=>{if(state.index<state.questions.length-1){state.index++;state.selected=null;state.answered=false;renderQuestion();}else{status(t("done"));$("bgmGameQuestionArea").hidden=true;}});
     try { const m=JSON.parse(localStorage.getItem("bgmGameMember")||"null");if(m&&m.member_id){state.member=m;$("bgmGameRegister").hidden=true;$("bgmGameMemberLabel").textContent=m.display_name;} }catch(e){}
-    if(configured()) {state.client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);loadChallenge();loadLeaderboard();}
-    else {status(t("setup"));showCountdown();}
+    if(configured()) {
+      state.client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+      (async()=>{
+        const {data,error}=await state.client.auth.getSession();
+        if(error) { status(t("error")); return; }
+        if(!data.session) {
+          if(state.member) { state.member=null; try{localStorage.removeItem("bgmGameMember");}catch(e){} $("bgmGameRegister").hidden=false; }
+          const {error:authError}=await state.client.auth.signInAnonymously();
+          if(authError){status("Participant sign-in is not enabled in Supabase yet. Ask the organizer to enable Anonymous Sign-Ins.");return;}
+        }
+        if(state.member){$("bgmGameRegister").hidden=true;$("bgmGameMemberLabel").textContent=state.member.display_name;await loadChallenge();}
+        else { status(""); showCountdown(); }
+        await loadLeaderboard();
+      })();
+    } else {status(t("setup"));showCountdown();}
     setLanguage("en");
   }
   window.addEventListener("DOMContentLoaded",init);
