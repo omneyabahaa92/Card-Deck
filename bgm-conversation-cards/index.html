@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#65091d" />
+<title>BGM Conversation Cards</title>
+<style>
+:root{--bg:#10080b;--panel:#1d0d13;--cream:#fff2df;--muted:#cdb9bd;--red:#8f1232;--line:rgba(255,242,223,.16);--accent:#ff456d}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;color:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 50% -15%,#8c0b2b 0,transparent 46%),radial-gradient(ellipse at 100% 100%,#3b0b1a 0,transparent 38%),#10080b}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #ffd6a3;outline-offset:3px}.shell{width:min(100% - 32px,900px);margin:0 auto;padding:26px 0 38px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:42px;height:42px;border:2px solid #ffb5c4;border-radius:50%;display:grid;place-items:center;font-weight:950;letter-spacing:-2px;color:white;box-shadow:0 0 20px #8d183c55}.brand-name{font-weight:950;font-size:22px;letter-spacing:-.8px;line-height:1}.brand-sub{font-size:10px;letter-spacing:4px;margin-top:4px;color:#f4bdc9}.edition{font-size:10px;letter-spacing:2px;color:#f4bdc9;text-align:right}.hero{text-align:center;margin:0 auto 24px}.eyebrow{font-size:11px;letter-spacing:3px;color:#ff9db2;font-weight:800}.hero h1{font-size:clamp(30px,6vw,54px);line-height:.98;letter-spacing:-2px;margin:10px 0 12px;font-weight:1000}.hero h1 span{color:#ffb9c8}.hero p{margin:0 auto;color:#d9c5c9;line-height:1.5;max-width:530px;font-size:14px}.section-label{font-size:11px;letter-spacing:2px;color:#d9bdc4;font-weight:800;margin:24px 0 11px}.decks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.deck{position:relative;min-height:128px;border:1px solid var(--deck-border);border-radius:14px;padding:12px 8px 11px;color:var(--cream);background:linear-gradient(145deg,var(--deck-glow),#1b1016 75%);text-align:left;overflow:hidden;transition:transform .16s,border-color .16s,box-shadow .16s}.deck:before{content:"";position:absolute;inset:5px;border:1px solid color-mix(in srgb,var(--deck-border) 65%,transparent);border-radius:10px;pointer-events:none}.deck[aria-pressed="true"]{border-color:var(--deck-border);box-shadow:0 0 0 2px var(--deck-border),0 0 24px var(--deck-glow);transform:translateY(-3px)}.deck:hover{transform:translateY(-2px)}.deck-cover{display:block;width:100%;aspect-ratio:.72;object-fit:cover;border-radius:8px;margin:0 auto 10px;border:1px solid color-mix(in srgb,var(--deck-border) 70%,transparent);box-shadow:0 7px 18px #0005}.deck-icon{font-size:24px;display:block;margin-bottom:8px;filter:drop-shadow(0 0 8px var(--deck-border))}.deck-num{position:absolute;right:12px;top:12px;font-size:9px;letter-spacing:1px;color:var(--deck-border)}.deck-title{font-size:11px;line-height:1.18;font-weight:900;letter-spacing:.5px;display:block}.deck-desc{font-size:9px;line-height:1.25;color:#d6c6ca;display:block;margin-top:6px}.deck.collab{--deck-border:#ff5976;--deck-glow:#591125}.deck.growth{--deck-border:#65a8ff;--deck-glow:#10264a}.deck.customers{--deck-border:#67d7a2;--deck-glow:#103a2d}.deck.skills{--deck-border:#d58bff;--deck-glow:#371348}.deck.wild{--deck-border:#f4c66b;--deck-glow:#493316}
+.card-wrap{margin-top:22px;border-radius:22px;padding:1px;background:linear-gradient(135deg,#ff6b8b,#6d1730 35%,#e9b966 75%,#8f1232)}.question-card{position:relative;min-height:290px;border-radius:21px;padding:22px clamp(18px,5vw,42px) 24px;background:radial-gradient(circle at 90% 0%,#5a1428 0,transparent 38%),linear-gradient(145deg,#fff4e4,#f1dfd0);color:#210c12;overflow:hidden}.question-card:after{content:"";position:absolute;width:220px;height:220px;border:1px solid #9a173b22;border-radius:50%;right:-95px;bottom:-125px;box-shadow:0 0 0 15px #9a173b08,0 0 0 32px #9a173b06;pointer-events:none}.card-top{display:flex;justify-content:space-between;align-items:center;gap:12px;position:relative;z-index:1}.mini-brand{font-size:12px;letter-spacing:2px;font-weight:950;color:#7d1230}.draw-count{font-size:10px;letter-spacing:1px;color:#7b5260;font-weight:800}.question-art{height:116px;margin:14px 0 5px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px;background:radial-gradient(ellipse at center,var(--chosen,#8f1232),#1b0b11 78%);border:1px solid color-mix(in srgb,var(--chosen,#8f1232) 60%,transparent);position:relative;z-index:1}.question-art img{height:100%;max-width:100%;width:100%;object-fit:contain;filter:drop-shadow(0 5px 9px #0005)}.category-pill{display:inline-flex;align-items:center;gap:7px;border-radius:100px;background:var(--chosen,#8f1232);color:white;font-size:10px;letter-spacing:1.5px;font-weight:900;padding:8px 12px;margin-top:27px;position:relative;z-index:1}.question-card h2{font-size:clamp(24px,5vw,39px);line-height:1.12;letter-spacing:-1px;margin:18px 0 12px;max-width:690px;position:relative;z-index:1}.card-hint{font-size:13px;line-height:1.55;color:#755c62;max-width:560px;position:relative;z-index:1}.card-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #8e536033;margin-top:24px;padding-top:14px;position:relative;z-index:1}.card-bottom span{font-size:10px;letter-spacing:1.5px;color:#80515e;font-weight:800}.controls{display:flex;gap:10px;margin-top:14px}.btn{border:1px solid #a63a55;border-radius:12px;padding:13px 16px;font-weight:850;font-size:13px;flex:1;transition:filter .15s,transform .15s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn-primary{background:linear-gradient(135deg,#a71840,#690c27);color:white;border-color:#cf4567;box-shadow:0 8px 22px #750c2933}.btn-secondary{background:#241118;color:#fbe9e8;border-color:#5a2937}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}.footer-note{text-align:center;color:#a98e96;font-size:11px;line-height:1.5;margin-top:18px}.toast{min-height:18px;text-align:center;color:#ffc2cf;font-size:12px;margin-top:8px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:650px){.question-art{height:94px;margin-top:12px}.shell{width:min(100% - 22px,540px);padding-top:18px}.top{margin-bottom:22px}.edition{font-size:8px;letter-spacing:1px}.brand-name{font-size:19px}.decks{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.deck{min-height:112px;padding:12px}.deck:last-child{grid-column:span 2;min-height:95px}.deck:last-child .deck-icon{display:inline-block;margin:0 9px 0 0}.deck:last-child .deck-title,.deck:last-child .deck-desc{display:inline}.deck:last-child .deck-desc{margin-left:5px}.question-card{min-height:320px;padding:19px}.controls{flex-direction:column}.btn{min-height:47px}.hero h1{letter-spacing:-1.4px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <div class="brand" aria-label="BGM Meetup">
+      <div class="brand-mark">BGM</div>
+      <div><div class="brand-name">BGM</div><div class="brand-sub">MEETUP</div></div>
+    </div>
+    <div class="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">GOOD CONVERSATIONS. REAL CONNECTIONS.</div>
+    <h1>Pick a deck.<br><span>Start something.</span></h1>
+    <p>Choose what you need right now, then draw a question. No pitching. No pressure. Just useful conversations.</p>
+  </section>
+  <div class="section-label">CHOOSE YOUR DECK</div>
+  <section class="decks" id="decks" aria-label="Question decks"></section>
+  <section class="card-wrap" aria-live="polite" aria-atomic="true">
+    <article class="question-card" id="questionCard">
+      <div class="card-top"><div class="mini-brand">BGM ✦ MEETUP</div><div class="draw-count" id="drawCount">READY TO DRAW</div></div>
+      <div class="category-pill" id="categoryPill">✦ CHOOSE A DECK</div>
+      <div class="question-art"><img id="questionArt" src="assets/collab-art.jpg" alt="BGM collaboration deck artwork"></div>
+      <h2 id="questionText">What would be useful for you to talk about today?</h2>
+      <p class="card-hint" id="questionHint">Pick one of the five decks above. Your next question will appear here.</p>
+      <div class="card-bottom"><span>ASK IT. EXPLORE IT. CONNECT.</span><span id="cardNumber">BGM / 00</span></div>
+    </article>
+  </section>
+  <div class="controls">
+    <button class="btn btn-primary" id="drawBtn" disabled>✦ Draw a question</button>
+    <button class="btn btn-secondary" id="resetBtn" disabled>↻ Shuffle deck</button>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <p class="footer-note">Questions are shuffled on this device. Each deck cycles through all 10 prompts before repeating.<br>Find a useful connection? Keep talking. Need a new perspective? Rotate when your host signals.</p>
+</main>
+<script>
+const decks = [
+ {id:'collab',name:'COLLABORATION',short:'BUILD TOGETHER',icon:'🤝',color:'#a7193f',desc:'Find people to build with',questions:[
+  'I’m working on ______ and I’m looking for someone who can help me with ______. What would you suggest?',
+  'I’m good at ______ and I’d love to contribute that to a collaboration. What could we build together?',
+  'What kind of person or skill would make the biggest difference to what you’re working on right now?',
+  'If two people at this table teamed up, what useful offer could they create together?',
+  'I’m looking for a partner for ______. What should I make sure we agree on before starting?',
+  'What’s one task or challenge you’d happily share with the right collaborator?',
+  'Have you seen a great collaboration between two different industries? What made it work?',
+  'What can you bring to a partnership besides your professional skills?',
+  'Who at this table should I talk to next about a possible collaboration, and why?',
+  'What’s one small project we could test together before committing to something bigger?'
+ ]},
+ {id:'growth',name:'GROWTH & CHALLENGES',short:'GET UNSTUCK',icon:'⛰️',color:'#2458a6',desc:'Get a fresh perspective',questions:[
+  'What’s the biggest challenge you’re dealing with in your business or career right now?',
+  'If you were in my position, what would you focus on over the next 90 days?',
+  'I’m trying to ______, but I keep getting stuck at ______. What might I be missing?',
+  'What’s one mistake you made that taught you something valuable about growing?',
+  'What would you stop doing if you wanted to make more progress with less effort?',
+  'What’s a problem you solved recently that someone else here might be facing too?',
+  'If you had to test one new idea this month, what would you try first?',
+  'What’s one assumption about your business or career that you’re starting to question?',
+  'What would you measure to know whether your current approach is actually working?',
+  'What’s one practical next step you think I should take after hearing my challenge?'
+ ]},
+ {id:'customers',name:'CUSTOMERS & OPPORTUNITIES',short:'FIND THE RIGHT PEOPLE',icon:'🚪',color:'#17764f',desc:'Open doors and find leads',questions:[
+  'Who is your ideal customer right now, and what problem do you solve for them?',
+  'Where are you currently finding customers or opportunities? What’s working best?',
+  'I want to reach more ______. Where would you start looking for those people?',
+  'What’s one type of business you’d love to be introduced to, and why?',
+  'What do people usually misunderstand about the value of what you offer?',
+  'What’s a new market or audience you’re curious about but haven’t explored yet?',
+  'How do you build trust with a potential customer before asking for a sale?',
+  'What kind of referral would be genuinely useful to you right now?',
+  'What’s one partnership or channel that could help you reach the right people?',
+  'Can you think of someone or a type of business I should connect with based on what I’ve shared?'
+ ]},
+ {id:'skills',name:'SKILLS & RESOURCES',short:'SHARE WHAT YOU KNOW',icon:'💡',color:'#7536a0',desc:'Share skills and useful resources',questions:[
+  'What’s a skill you have that people don’t usually realise could help them?',
+  'What’s a problem you can help another person solve in less than a week?',
+  'What are you trying to learn right now, and what kind of help would make it easier?',
+  'What tool, resource, or process has saved you the most time lately?',
+  'What’s something you know now that you wish someone had told you earlier?',
+  'What part of your work would you love to get better at, and who might know how?',
+  'What resource or connection could you share with someone at this table today?',
+  'What do people come to you for advice about most often?',
+  'What’s one thing you could teach someone here in ten minutes?',
+  'What kind of support would help you do your best work right now?'
+ ]},
+ {id:'wild',name:'WILDCARD',short:'THINK DIFFERENTLY',icon:'✦',color:'#9a6a17',desc:'Try an unexpected angle',questions:[
+  'If you had to start a business with someone at this table tomorrow, what would you build?',
+  'What’s one opinion about your industry that you think most people would disagree with?',
+  'If money and time weren’t the first obstacles, what would you try to create?',
+  'What opportunity do you think people in your industry are overlooking?',
+  'What’s the most useful thing you learned from a project that didn’t go to plan?',
+  'If you could ask this whole table one question and get honest answers, what would you ask?',
+  'What would you do differently if you had to find your first customer all over again?',
+  'What two completely different industries do you think should work together more often?',
+  'What’s a small experiment you could run this week that might lead to a big opportunity?',
+  'Who at this table has a perspective that’s different from yours, and what would you like to ask them?'
+ ]}
+];
+let selected = null;
+let order = [];
+let drawIndex = 0;
+const decksEl = document.getElementById('decks');
+const drawBtn = document.getElementById('drawBtn');
+const resetBtn = document.getElementById('resetBtn');
+const toast = document.getElementById('toast');
+const questionText = document.getElementById('questionText');
+const questionHint = document.getElementById('questionHint');
+const categoryPill = document.getElementById('categoryPill');
+const drawCount = document.getElementById('drawCount');
+const cardNumber = document.getElementById('cardNumber');
+const questionArt = document.getElementById('questionArt');
+function renderDecks(){
+ decksEl.innerHTML = decks.map((d,i)=>`<button class="deck ${d.id}" type="button" data-deck="${d.id}" aria-pressed="false" aria-label="Choose ${d.name} deck"><span class="deck-num">0${i+1}</span><img class="deck-cover" src="assets/${d.id}-cover.jpg" alt="${d.name} illustrated trading card cover" loading="eager"><span class="deck-icon" aria-hidden="true">${d.icon}</span><span class="deck-title">${d.name}</span><span class="deck-desc">${d.short}</span></button>`).join('');
+ decksEl.querySelectorAll('[data-deck]').forEach(btn=>btn.addEventListener('click',()=>selectDeck(btn.dataset.deck)));
+}
+function shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}return array;}
+function selectDeck(id){
+ selected=decks.find(d=>d.id===id); order=shuffle(selected.questions.map((_,i)=>i)); drawIndex=0;
+ decksEl.querySelectorAll('[data-deck]').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.deck===id)));
+ drawBtn.disabled=false;resetBtn.disabled=false;toast.textContent=`${selected.name} selected. Draw your first question.`;
+ drawNext();
+}
+function drawNext(){
+ if(!selected)return;
+ if(drawIndex>=order.length){order=shuffle(selected.questions.map((_,i)=>i));drawIndex=0;toast.textContent='You’ve seen all 10. The deck has been reshuffled!';}
+ const question=selected.questions[order[drawIndex]];
+ document.documentElement.style.setProperty('--chosen',selected.color);
+ questionArt.src=`assets/${selected.id}-art.jpg`;
+ questionArt.alt=`${selected.name} illustrated deck artwork`;
+ categoryPill.textContent=`${selected.icon}  ${selected.name}`;
+ questionText.textContent=question;
+ questionHint.textContent='Read it out loud, then let the table take the conversation somewhere useful.';
+ drawCount.textContent=`QUESTION ${String(drawIndex+1).padStart(2,'0')} / 10`;
+ cardNumber.textContent=`BGM / ${String(order[drawIndex]+1).padStart(2,'0')}`;
+ drawIndex++;
+}
+function resetDeck(){if(!selected)return;order=shuffle(selected.questions.map((_,i)=>i));drawIndex=0;toast.textContent=`${selected.name} shuffled. No repeats until all 10 questions are drawn.`;drawNext();}
+drawBtn.addEventListener('click',drawNext);resetBtn.addEventListener('click',resetDeck);renderDecks();
+</script>
+</body>
+</html>
