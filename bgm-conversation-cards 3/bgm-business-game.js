@@ -6,14 +6,14 @@
   const state = { lang: "en", client: null, member: null, challenge: null, questions: [], index: 0, selected: null, answered: false, timer: null };
   const copy = {
     en: {
-      title: "BGM Business Growth Game", subtitle: "One shared challenge. Ten decisions. Better business instincts.",
+      door: "Join Daily Challenge", back: "← Back to cards", title: "BGM Business Growth Game", subtitle: "One shared challenge. Ten decisions. Better business instincts.",
       register: "Join the daily challenge", name: "Display name", phone: "WhatsApp number", consent: "I agree that my display name and score may appear on the BGM leaderboard. My WhatsApp number stays private.",
       join: "Join & play", loading: "Loading today's challenge…", setup: "The game backend hasn't been connected yet. The database schema is ready in the repository; an organizer needs to configure Supabase and publish today's ten questions.",
       noChallenge: "The next challenge hasn't been published yet. Check back at noon Cairo time.",
       countdown: "NEXT CHALLENGE IN", question: "QUESTION", of: "OF", submit: "Lock my answer", next: "Next question →", finish: "View weekly leaderboard", correct: "Correct decision!", incorrect: "Not quite — here's the reasoning.", points: "POINTS EARNED", leaderboard: "WEEKLY LEADERBOARD", expert: "EXPERT SKILL OF THE WEEK", privacy: "WhatsApp numbers are private and are not shown on the leaderboard.", already: "You've already answered this question. Your score won't be counted twice.", error: "Something went wrong. Please try again.", done: "You've completed today's challenge!", score: "Today's points", back: "Back to challenge", categories: "CUSTOMER DISCOVERY · SALES · MARKETING · STRATEGY · NEGOTIATION"
     },
     ar: {
-      title: "لعبة BGM لنمو البيزنس", subtitle: "تحدي واحد للجميع. ١٠ قرارات. وتفكير أقوى في البيزنس.",
+      door: "شارك في تحدي النهارده", back: "ارجع للكروت ←", title: "لعبة BGM لنمو البيزنس", subtitle: "تحدي واحد للجميع. ١٠ قرارات. وتفكير أقوى في البيزنس.",
       register: "شارك في تحدي النهارده", name: "الاسم اللي هيظهر", phone: "رقم WhatsApp", consent: "موافق إن اسمي ونتيجتي يظهروا في ترتيب BGM. رقم WhatsApp هيفضل خاص.",
       join: "سجّل وابدأ", loading: "بنحمّل تحدي النهارده…", setup: "اللعبة لسه محتاجة ربط بالـ backend. ملف قاعدة البيانات موجود في الريبو؛ المنظّم محتاج يضبط Supabase وينشر أسئلة النهارده العشرة.",
       noChallenge: "تحدي جديد لسه ما اتنشرش. ارجع وقت الظهر بتوقيت القاهرة.",
@@ -30,7 +30,7 @@
     document.documentElement.lang = lang;
     $("bgmGameEn").setAttribute("aria-pressed", String(lang === "en"));
     $("bgmGameAr").setAttribute("aria-pressed", String(lang === "ar"));
-    ["bgmGameTitle:title","bgmGameSubtitle:subtitle","bgmGameRegisterTitle:register","bgmGameNameLabel:name","bgmGamePhoneLabel:phone","bgmGameConsentLabel:consent","bgmGameJoin:join","bgmGameCountdownLabel:countdown","bgmGameLeaderboardTitle:leaderboard","bgmGamePrivacy:privacy","bgmGameCategories:categories"].forEach(pair => { const [id,key]=pair.split(":"); setText(id,key); });
+    ["bgmGameDoorLabel:door","bgmGameClose:back","bgmGameTitle:title","bgmGameSubtitle:subtitle","bgmGameRegisterTitle:register","bgmGameNameLabel:name","bgmGamePhoneLabel:phone","bgmGameConsentLabel:consent","bgmGameJoin:join","bgmGameCountdownLabel:countdown","bgmGameLeaderboardTitle:leaderboard","bgmGamePrivacy:privacy","bgmGameCategories:categories"].forEach(pair => { const [id,key]=pair.split(":"); setText(id,key); });
     if (state.challenge) renderQuestion();
     renderLeaderboard();
   }
@@ -125,7 +125,7 @@
     $("bgmGameTopThree").textContent=rows.length?rows.slice(0,3).map((r,i)=>(i+1)+". "+r.display_name+" — "+r.points+" XP").join("  •  "):"—";
   }
   function init() {
-    $("bgmGameEn").addEventListener("click",()=>setLanguage("en"));$("bgmGameAr").addEventListener("click",()=>setLanguage("ar"));
+    $("bgmGameEn").addEventListener("click",()=>setLanguage("en"));$("bgmGameAr").addEventListener("click",()=>setLanguage("ar"));\n    $("bgmGameDoor").addEventListener("click",()=>{document.body.classList.add("bgm-game-open");$("bgmGamePanel").scrollIntoView({behavior:"smooth",block:"start"});});\n    $("bgmGameClose").addEventListener("click",()=>{document.body.classList.remove("bgm-game-open");window.scrollTo({top:0,behavior:"smooth"});});
     $("bgmGameJoin").addEventListener("click",register);$("bgmGameSubmit").addEventListener("click",submitAnswer);
     $("bgmGameNext").addEventListener("click",()=>{if(state.index<state.questions.length-1){state.index++;state.selected=null;state.answered=false;renderQuestion();}else{status(t("done"));$("bgmGameQuestionArea").hidden=true;}});
     try { const m=JSON.parse(localStorage.getItem("bgmGameMember")||"null");if(m&&m.member_id){state.member=m;$("bgmGameRegister").hidden=true;$("bgmGameMemberLabel").textContent=m.display_name;} }catch(e){}
