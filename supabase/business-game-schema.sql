@@ -187,8 +187,8 @@ as $$
     join public.bgm_questions q on q.id = a.question_id
     join public.bgm_challenge_sets s on s.id = q.challenge_set_id
     where m.is_active = true
-      and s.challenge_date >= p_week_start
-      and s.challenge_date < p_week_start + 7
+      and s.challenge_date >= coalesce(p_week_start, date_trunc('week', timezone('Africa/Cairo', now()))::date)
+      and s.challenge_date < coalesce(p_week_start, date_trunc('week', timezone('Africa/Cairo', now()))::date) + 7
     group by m.id, m.display_name
     order by points desc, correct_answers desc, m.display_name asc
     limit 100
