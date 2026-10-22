@@ -15,10 +15,10 @@ The registration RPC is an MVP convenience, not identity verification. A visitor
 1. Create a Supabase project.
 2. Run `supabase/business-game-schema.sql` in SQL Editor.
 3. Configure verified identity before announcing prizes.
-4. Create an authenticated organizer/admin workflow to publish a set. The public app must not be allowed to write correct answers or publish sets.
+4. Deploy the organizer page at `/organizer.html`. Create an organizer account in Supabase Auth, then add that user's UUID to `public.bgm_admins` from the Supabase SQL Editor, for example: `insert into public.bgm_admins(user_id) values ('YOUR_AUTH_USER_UUID');`. The public app must not be allowed to write correct answers or publish sets.
 5. Add exactly ten rows in `bgm_questions` for each set. Use `Africa/Cairo` to calculate each day's noon start and next day's noon end, then store those instants in `starts_at` and `ends_at`.
-6. Publish by setting `is_published = true` only after all ten questions and translations have been reviewed.
-7. Configure the frontend with the Supabase project URL and anon/publishable key only. Never use the service-role key client-side.
+6. Open `/organizer.html`, sign in, paste the reviewed JSON array, choose the Cairo challenge date and Expert Skill of the Week, then publish. The secure RPC validates ten bilingual questions and sets the daily window to noon-to-noon Cairo time.
+7. Configure both `bgm-conversation-cards 3/bgm-business-game.js` and `organizer.html` with the Supabase project URL and anon/publishable key only. Never use the service-role key client-side.
 
 ## Daily content workflow
 Ask ChatGPT to draft ten scenario-based multiple-choice questions with four options each, across Customer Discovery, Sales, Marketing, Strategy, and Negotiation (two per skill). Require English and Egyptian Arabic, one defensible best answer, a short explanation in both languages, and a difficulty mix. Review the set, then insert it using an authenticated organizer workflow. Schedule publishing at noon Cairo time only after the organizer has approved the content.
