@@ -267,6 +267,25 @@ body.quest-open .quest-panel{margin-top:0}
 #bgmSurveyForm .bgm-survey-choice{cursor:pointer}
 #bgmSurveyForm .bgm-survey-choice input{width:17px;min-width:17px;height:17px;flex:0 0 17px}
 
+/* Friendly post-submit confirmation screens */
+.bgm-survey-status.bgm-submit-success{
+  display:block;
+  margin:12px 0 4px;
+  padding:22px 18px;
+  border:1px solid #e7a2ba;
+  border-radius:16px;
+  background:linear-gradient(145deg,#fff2df,#f8d9e5);
+  color:#65122f;
+  font-size:clamp(18px,4.5vw,23px);
+  font-weight:800;
+  line-height:1.5;
+  text-align:center;
+  box-shadow:0 8px 24px #0002;
+}
+.bgm-survey-form label[hidden],
+.bgm-survey-form input[hidden],
+.bgm-survey-form button[hidden]{display:none!important}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -770,7 +789,13 @@ bgmSurveyPostFrame.addEventListener('load',function(){
   bgmCheckinSubmit.disabled=false;
   bgmCheckinSubmit.textContent=bgmCheckinSubmitLabel;
   bgmCheckinForm.reset();
-  document.getElementById('bgmCheckinStatus').textContent=language==='ar'?'تم إرسال تسجيل الحضور.':'Check-in submitted.';
+  [...bgmCheckinForm.querySelectorAll('label[for],input:not([type="hidden"]),button')].forEach(el=>el.hidden=true);
+  const checkinStatus=document.getElementById('bgmCheckinStatus');
+  checkinStatus.classList.add('bgm-submit-success');
+  checkinStatus.textContent=language==='ar'
+    ? 'اتسجلت! 🎉 وجودك هو اللي بيكمّل الصورة. يلا نعمل Connections أحلى في الـ Meetup الجاي!'
+    : 'You’re on the list! 🎉 BGM is better with you in the room. See you at the next meetup—bring your curiosity and your best ideas!';
+  checkinStatus.scrollIntoView({behavior:'smooth',block:'center'});
 });
 bgmCheckinForm.addEventListener('submit',function(event){
   if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(BGM_SURVEY_ENDPOINT)){
@@ -827,7 +852,12 @@ bgmSurveyFrame.addEventListener('load',function(){
   bgmSurveyForm.reset();
   bgmSurveySubmit.disabled=false;
   bgmSurveySubmit.textContent=bgmSurveySubmitLabel;
-  showBgmSurveyStep(0);
+  bgmSurveySteps.forEach(step=>{step.hidden=true;});
+  document.getElementById('bgmSurveyStatus').classList.add('bgm-submit-success');
+  document.getElementById('bgmSurveyStatus').textContent=language==='ar'
+    ? 'شكراً إنك جزء من BGM ❤️ أشوفكم في الـ Meetup الجاي!'
+    : 'Thank you for being part of BGM ❤️ See you at our next meetup!';
+  document.getElementById('bgmSurveyStatus').scrollIntoView({behavior:'smooth',block:'center'});
 });
 bgmSurveyForm.addEventListener('submit',function(event){
   if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(BGM_SURVEY_ENDPOINT)){
