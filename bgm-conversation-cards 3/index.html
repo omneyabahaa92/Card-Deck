@@ -338,6 +338,31 @@ body.quest-open .quest-panel{margin-top:0}
  .bgm-survey-status.bgm-thankyou-card{min-height:230px}
 }
 
+
+/* Fix confirmation cards inheriting screen-reader-only status sizing */
+.bgm-survey-status.bgm-thankyou-card{
+  position:relative!important;
+  display:flex!important;
+  width:100%!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:260px!important;
+  padding:30px 22px!important;
+  margin:16px 0 4px!important;
+  overflow:hidden!important;
+  clip:auto!important;
+  clip-path:none!important;
+  white-space:normal!important;
+  border:1px solid var(--thanks-frame)!important;
+  background:radial-gradient(ellipse at 50% 32%,var(--thanks-glow),transparent 62%),linear-gradient(145deg,var(--thanks-base),#170a13 88%)!important;
+  background-image:radial-gradient(ellipse at 50% 32%,var(--thanks-glow),transparent 62%),linear-gradient(145deg,var(--thanks-base),#170a13 88%)!important;
+}
+.bgm-survey-status.bgm-thankyou-card:before{inset:8px!important}
+.bgm-survey-status.bgm-thankyou-card:after{inset:-50% -100%!important}
+@media(max-width:600px){
+ .bgm-survey-status.bgm-thankyou-card{width:100%!important;min-height:230px!important;padding:26px 18px!important}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
