@@ -71,6 +71,11 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-survey-open .bgm-survey-panel{display:block!important;margin-top:0}
 .bgm-survey-open .hero,.bgm-survey-open #sectionLabel,.bgm-survey-open #decks,.bgm-survey-open #miniDecks,.bgm-survey-open #cardWrap,.bgm-survey-open #quickfireBar,.bgm-survey-open #controls,.bgm-survey-open #toast,.bgm-survey-open #footerNote,.bgm-survey-open .quest-panel,.bgm-survey-open .bgm-game-panel{display:none!important}
 .bgm-survey-open .bgm-survey-panel[hidden]{display:block!important}
+
+.bgm-checkin-open .bgm-survey-panel{display:block!important;margin-top:0}
+.bgm-checkin-open .hero,.bgm-checkin-open #sectionLabel,.bgm-checkin-open #decks,.bgm-checkin-open #miniDecks,.bgm-checkin-open #cardWrap,.bgm-checkin-open #quickfireBar,.bgm-checkin-open #controls,.bgm-checkin-open #toast,.bgm-checkin-open #footerNote,.bgm-checkin-open .quest-panel,.bgm-checkin-open .bgm-game-panel,.bgm-checkin-open #bgmSurveyPanel{display:none!important}
+.bgm-checkin-open #bgmCheckinPanel[hidden]{display:block!important}
+
 .bgm-survey-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
 .bgm-survey-head h2{font-size:clamp(25px,5vw,36px);margin:8px 0;letter-spacing:-1px}
 .bgm-survey-head p{margin:0;color:#d9c5c9;font-size:13px;line-height:1.55;max-width:580px}
@@ -125,7 +130,7 @@ body.quest-open .quest-panel{margin-top:0}
       <div class="brand-mark">BGM</div>
       <div><div class="brand-name">BGM</div><div class="brand-sub">MEETUP</div></div>
     </div>
-    <div class="top-tools"><button class="bgm-game-door" id="bgmGameDoor" type="button">↗ <span id="bgmGameDoorLabel">Join Daily Challenge</span></button><button class="bgm-survey-door" id="bgmSurveyDoor" type="button">↗ <span id="bgmSurveyDoorLabel">Member Survey</span></button><div class="edition" id="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div><div class="language-switch" role="group" aria-label="Language"><button class="lang-btn" id="langEn" type="button" aria-pressed="true">EN</button><button class="lang-btn" id="langAr" type="button" aria-pressed="false">عربي</button></div></div>
+    <div class="top-tools"><button class="bgm-game-door" id="bgmGameDoor" type="button">↗ <span id="bgmGameDoorLabel">Join Daily Challenge</span></button><button class="bgm-survey-door" id="bgmSurveyDoor" type="button">↗ <span id="bgmSurveyDoorLabel">Member Survey</span></button><button class="bgm-survey-door" id="bgmCheckinDoor" type="button">✓ <span id="bgmCheckinDoorLabel">Check In</span></button><div class="edition" id="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div><div class="language-switch" role="group" aria-label="Language"><button class="lang-btn" id="langEn" type="button" aria-pressed="true">EN</button><button class="lang-btn" id="langAr" type="button" aria-pressed="false">عربي</button></div></div>
   </header>
   <section class="hero">
     <div class="eyebrow" id="eyebrow">GOOD CONVERSATIONS. REAL CONNECTIONS.</div>
@@ -209,6 +214,20 @@ body.quest-open .quest-panel{margin-top:0}
     </form>
     <iframe name="bgmSurveyPostTarget" title="Survey submission response" hidden></iframe>
     <div class="bgm-survey-setup" id="bgmSurveySetup" hidden>Survey saving isn't configured yet. The organizer needs to connect the Google Sheets endpoint in the page settings.</div>
+  </section>
+  <section class="bgm-survey-panel" id="bgmCheckinPanel" aria-labelledby="bgmCheckinTitle" hidden>
+    <div class="bgm-survey-head">
+      <div><div class="quest-kicker">BGM · EVENT CHECK-IN</div><h2 id="bgmCheckinTitle">Check in to BGM</h2><p id="bgmCheckinIntro">Enter your WhatsApp number to record your attendance.</p></div>
+      <button class="bgm-game-close" id="bgmCheckinClose" type="button">← Back to cards</button>
+    </div>
+    <form id="bgmCheckinForm" class="bgm-survey-form" method="POST" target="bgmSurveyPostTarget">
+      <input type="hidden" name="action" value="checkin" />
+      <input type="hidden" name="source" value="BGM Event Check-in" />
+      <label for="bgmCheckinPhone" id="bgmCheckinPhoneLabel">WhatsApp number</label>
+      <input id="bgmCheckinPhone" name="whatsapp" type="tel" maxlength="30" autocomplete="tel" placeholder="+20..." required />
+      <button class="btn btn-primary" id="bgmCheckinSubmit" type="submit">Confirm check-in</button>
+      <div class="bgm-survey-status" id="bgmCheckinStatus" role="status" aria-live="polite"></div>
+    </form>
   </section>
 
   <section class="quest-panel" id="questPanel" aria-live="polite">
@@ -427,6 +446,12 @@ function applyLanguage(lang){
  document.getElementById('sectionLabel').textContent=tr('section');
  document.getElementById('bgmGameDoorLabel').textContent=lang==='ar'?'شارك في تحدي النهارده':'Join Daily Challenge';
  document.getElementById('bgmSurveyDoorLabel').textContent=lang==='ar'?'استبيان الأعضاء':'Member Survey';
+ document.getElementById('bgmCheckinDoorLabel').textContent=lang==='ar'?'تسجيل الحضور':'Check In';
+ document.getElementById('bgmCheckinTitle').textContent=lang==='ar'?'تسجيل الحضور في BGM':'Check in to BGM';
+ document.getElementById('bgmCheckinIntro').textContent=lang==='ar'?'اكتب رقم WhatsApp لتسجيل حضورك.':'Enter your WhatsApp number to record your attendance.';
+ document.getElementById('bgmCheckinPhoneLabel').textContent=lang==='ar'?'رقم WhatsApp':'WhatsApp number';
+ document.getElementById('bgmCheckinSubmit').textContent=lang==='ar'?'تأكيد الحضور':'Confirm check-in';
+ document.getElementById('bgmCheckinClose').textContent=lang==='ar'?'← الرجوع للكروت':'← Back to cards';
  document.getElementById('bgmSurveyTitle').textContent=lang==='ar'?'انضم لقائمة أعضاء BGM':'Join the BGM member list';
  document.getElementById('bgmSurveyIntro').textContent=lang==='ar'?'سجّل اسمك ورقم WhatsApp عشان نقدر نتواصل معاك بخصوص أنشطة BGM.':'Share your name and WhatsApp number so we can connect with you about BGM activities.';
  document.getElementById('bgmSurveyClose').textContent=lang==='ar'?'← ارجع للكروت':'← Back to cards';
@@ -567,6 +592,52 @@ const BGM_SURVEY_ENDPOINT = "https://script.google.com/macros/s/AKfycbytk4h4ynqX
 function openBgmSurvey(){stopQuickfire();document.body.classList.remove('deck-open','quest-open','bgm-game-open');document.body.classList.add('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=false;document.getElementById('bgmSurveyStatus').textContent='';document.getElementById('bgmSurveySetup').hidden=/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT);document.getElementById('bgmSurveyPanel').scrollIntoView({behavior:'smooth',block:'start'});}
 function closeBgmSurvey(){document.body.classList.remove('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=true;if(selected)document.body.classList.add('deck-open');window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('bgmSurveyDoor').addEventListener('click',openBgmSurvey);
+function openBgmCheckin(){
+  stopQuickfire();
+  document.body.classList.remove('deck-open','quest-open','bgm-game-open','bgm-survey-open');
+  document.body.classList.add('bgm-checkin-open');
+  document.getElementById('bgmCheckinPanel').hidden=false;
+  document.getElementById('bgmCheckinStatus').textContent='';
+  document.getElementById('bgmCheckinPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeBgmCheckin(){
+  document.body.classList.remove('bgm-checkin-open');
+  document.getElementById('bgmCheckinPanel').hidden=true;
+  if(selected)document.body.classList.add('deck-open');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('bgmCheckinDoor').addEventListener('click',openBgmCheckin);
+document.getElementById('bgmCheckinClose').addEventListener('click',closeBgmCheckin);
+const bgmCheckinForm=document.getElementById('bgmCheckinForm');
+bgmCheckinForm.action=BGM_SURVEY_ENDPOINT;
+const bgmCheckinPhone=document.getElementById('bgmCheckinPhone');
+const bgmCheckinSubmit=document.getElementById('bgmCheckinSubmit');
+const bgmCheckinSubmitLabel=bgmCheckinSubmit.textContent;
+let bgmCheckinFrameReady=false,bgmCheckinTimeout=null;
+const bgmSurveyPostFrame=document.querySelector('iframe[name="bgmSurveyPostTarget"]');
+bgmSurveyPostFrame.addEventListener('load',function(){
+  if(!bgmCheckinFrameReady)return;
+  bgmCheckinFrameReady=false;
+  if(bgmCheckinTimeout)clearTimeout(bgmCheckinTimeout);
+  bgmCheckinSubmit.disabled=false;
+  bgmCheckinSubmit.textContent=bgmCheckinSubmitLabel;
+  bgmCheckinForm.reset();
+  document.getElementById('bgmCheckinStatus').textContent=language==='ar'?'تم إرسال تسجيل الحضور.':'Check-in submitted.';
+});
+bgmCheckinForm.addEventListener('submit',function(event){
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(BGM_SURVEY_ENDPOINT)){
+    event.preventDefault();
+    return;
+  }
+  bgmCheckinSubmit.disabled=true;
+  bgmCheckinSubmit.textContent=language==='ar'?'جاري التسجيل…':'Checking in…';
+  document.getElementById('bgmCheckinStatus').textContent='';
+  bgmCheckinFrameReady=true;
+  if(bgmCheckinTimeout)clearTimeout(bgmCheckinTimeout);
+  bgmCheckinTimeout=setTimeout(function(){
+    bgmCheckinSubmit.textContent=language==='ar'?'لسه بنسجل…':'Still checking in…';
+  },5000);
+});
 document.getElementById('bgmSurveyClose').addEventListener('click',closeBgmSurvey);
 const bgmSurveyForm=document.getElementById('bgmSurveyForm');
 bgmSurveyForm.action=BGM_SURVEY_ENDPOINT;
