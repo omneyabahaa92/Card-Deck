@@ -363,6 +363,77 @@ body.quest-open .quest-panel{margin-top:0}
  .bgm-survey-status.bgm-thankyou-card{width:100%!important;min-height:230px!important;padding:26px 18px!important}
 }
 
+
+/* Use the five uploaded standalone BGM artwork files (not the old combined sprite) */
+.top-tools .mini-action-card{
+  background-image:none!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border-width:1px!important;
+  aspect-ratio:2 / 3!important;
+  min-width:76px!important;
+  width:clamp(76px,11vw,112px)!important;
+  height:auto!important;
+  min-height:0!important;
+  box-shadow:0 5px 16px #0006!important;
+  font-size:0!important;
+}
+.top-tools .mini-action-card .mini-action-icon,
+.top-tools .mini-action-card .mini-action-label,
+.top-tools .mini-action-card .mini-action-number{display:none!important}
+.top-tools .mini-action-challenge{
+  background-image:url("assets/bgm-site-assets/daily-challenge.webp")!important;
+  border-color:#ffad67!important;
+}
+.top-tools .mini-action-survey{
+  background-image:url("assets/bgm-site-assets/member-survey.webp")!important;
+  border-color:#dba5ff!important;
+}
+.top-tools .mini-action-checkin{
+  background-image:url("assets/bgm-site-assets/check-in.webp")!important;
+  border-color:#8cecf0!important;
+}
+.bgm-survey-status.bgm-thankyou-card{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  aspect-ratio:3 / 2!important;
+  margin:16px 0 4px!important;
+  padding:0!important;
+  overflow:hidden!important;
+  clip:auto!important;
+  clip-path:none!important;
+  white-space:normal!important;
+  border:0!important;
+  border-radius:16px!important;
+  background-color:transparent!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  box-shadow:0 12px 30px #0005!important;
+  color:transparent!important;
+  font-size:0!important;
+}
+.bgm-survey-status.bgm-thankyou-card:before,
+.bgm-survey-status.bgm-thankyou-card:after{display:none!important;content:none!important}
+.bgm-survey-status.bgm-thankyou-card>*{display:none!important}
+.bgm-survey-status.bgm-survey-thankyou{
+  background-image:url("assets/bgm-site-assets/survey-thank-you.webp")!important;
+}
+.bgm-survey-status.bgm-checkin-thankyou{
+  background-image:url("assets/bgm-site-assets/check-in-success.webp")!important;
+}
+@media(max-width:600px){
+  .top-tools .mini-action-card{width:clamp(76px,18vw,104px)!important}
+  .bgm-survey-status.bgm-thankyou-card{aspect-ratio:3 / 2!important}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
