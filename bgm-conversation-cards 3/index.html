@@ -227,9 +227,9 @@ body.quest-open .quest-panel{margin-top:0}
   opacity:.18;
   pointer-events:none;
 }
-.top-tools .mini-action-challenge{--card-deep:#4a160d;--card-glow:#ffb84d55;--card-frame:#f3bf70;color:#ffe4b0;border-color:#d98a43}
-.top-tools .mini-action-survey{--card-deep:#102a4d;--card-glow:#7ac8ff55;--card-frame:#a8dcff;color:#d8efff;border-color:#559bdb}
-.top-tools .mini-action-checkin{--card-deep:#0d3a2c;--card-glow:#72e4b355;--card-frame:#a0f0c9;color:#d5ffea;border-color:#4eb88d}
+.top-tools .mini-action-challenge{--card-deep:#47210f;--card-glow:#ff9b5a55;--card-frame:#ffd0a1;color:#ffe7d4;border-color:#e58a52}
+.top-tools .mini-action-survey{--card-deep:#46340d;--card-glow:#ffe17a55;--card-frame:#fff0b3;color:#fff5cf;border-color:#d8b94f}
+.top-tools .mini-action-checkin{--card-deep:#103642;--card-glow:#72e7f355;--card-frame:#b1f6ff;color:#d9fbff;border-color:#54b9cb}
 .top-tools .mini-action-icon{
   position:relative;z-index:1;
   display:grid;place-items:center;
@@ -255,6 +255,14 @@ body.quest-open .quest-panel{margin-top:0}
   .top-tools .mini-action-card{width:76px;min-width:76px;min-height:0;aspect-ratio:1.16/1}
   .top-tools .language-switch{grid-column:1/-1}
 }
+
+
+/* Keep the survey strictly one step at a time, including after reopening it. */
+#bgmSurveyForm [data-survey-step][hidden]{display:none!important}
+#bgmSurveyForm [data-survey-step]:not([hidden]){display:block}
+#bgmSurveyForm fieldset[data-survey-step]:not([hidden]){display:block}
+#bgmSurveyForm .bgm-survey-choice{cursor:pointer}
+#bgmSurveyForm .bgm-survey-choice input{width:17px;min-width:17px;height:17px;flex:0 0 17px}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -725,8 +733,8 @@ qel('questNext').addEventListener('click',()=>{
 qel('questReplay').addEventListener('click',()=>{questIndex=0;questSelected=null;questAnswered=false;renderQuestChallenge();});
 
 const BGM_SURVEY_ENDPOINT = "https://script.google.com/macros/s/AKfycbytk4h4ynqXryxNbMFcd6hr-xLCCGQVG-sOeVE45jljtpnq0utnT7adt27FLzckXzY7/exec";
-function openBgmSurvey(){stopQuickfire();document.body.classList.remove('deck-open','quest-open','bgm-game-open');document.body.classList.add('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=false;document.getElementById('bgmSurveyStatus').textContent='';document.getElementById('bgmSurveySetup').hidden=/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT);document.getElementById('bgmSurveyPanel').scrollIntoView({behavior:'smooth',block:'start'});}
-function closeBgmSurvey(){document.body.classList.remove('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=true;if(selected)document.body.classList.add('deck-open');window.scrollTo({top:0,behavior:'smooth'});}
+function openBgmSurvey(){stopQuickfire();document.body.classList.remove('deck-open','quest-open','bgm-game-open','bgm-checkin-open');document.body.classList.add('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=false;document.getElementById('bgmCheckinPanel').hidden=true;document.getElementById('bgmSurveyStatus').textContent='';document.getElementById('bgmSurveySetup').hidden=/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT);showBgmSurveyStep(0);document.getElementById('bgmSurveyPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function closeBgmSurvey(){document.body.classList.remove('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=true;showBgmSurveyStep(0);if(selected)document.body.classList.add('deck-open');window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('bgmSurveyDoor').addEventListener('click',openBgmSurvey);
 function openBgmCheckin(){
   stopQuickfire();
