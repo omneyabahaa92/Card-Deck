@@ -598,28 +598,32 @@ bgmSurveyForm.querySelectorAll('input[type="radio"]').forEach(input=>{
     }
   });
 });
+const bgmSurveySubmit=document.getElementById('bgmSurveySubmit');
+const bgmSurveySubmitLabel=bgmSurveySubmit.textContent;
+let bgmSurveyTimeout=null;
 bgmSurveyFrame.addEventListener('load',function(){
   if(!bgmSurveyFrameReady)return;
   bgmSurveyFrameReady=false;
-  const submit=document.getElementById('bgmSurveySubmit');
+  if(bgmSurveyTimeout) clearTimeout(bgmSurveyTimeout);
   bgmSurveyForm.reset();
-  submit.disabled=false;
+  bgmSurveySubmit.disabled=false;
+  bgmSurveySubmit.textContent=bgmSurveySubmitLabel;
   showBgmSurveyStep(0);
 });
 bgmSurveyForm.addEventListener('submit',function(event){
-  const submit=document.getElementById('bgmSurveySubmit');
   if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(BGM_SURVEY_ENDPOINT)){
     event.preventDefault();
     document.getElementById('bgmSurveySetup').hidden=false;
     return;
   }
-  submit.disabled=true;
+  bgmSurveySubmit.disabled=true;
+  bgmSurveySubmit.textContent=language==='ar'?'جاري الإرسال…':'Sending…';
   bgmSurveyFrameReady=true;
-  setTimeout(function(){
-    if(!submit.disabled)return;
-    submit.disabled=false;
-    bgmSurveyFrameReady=false;
-  },15000);
+  if(bgmSurveyTimeout) clearTimeout(bgmSurveyTimeout);
+  bgmSurveyTimeout=setTimeout(function(){
+    // Keep the form locked rather than risk duplicate rows if the response is slow.
+    bgmSurveySubmit.textContent=language==='ar'?'لسه بنبعت…':'Still sending…';
+  },5000);
 });
 showBgmSurveyStep(0);
 renderDecks();applyLanguage('en');
