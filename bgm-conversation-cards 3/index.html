@@ -120,6 +120,69 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-game-top{align-items:flex-start}.bgm-game-top-actions{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex-shrink:0}
 @media(max-width:650px){.top-tools{flex-direction:row;flex-wrap:wrap;justify-content:flex-end}.bgm-game-door{font-size:9px;padding:7px 9px}.edition{display:none}}
 
+/* Compact, organized mobile header */
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.top .brand{flex:0 0 auto}
+.top-tools{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+  justify-content:end;
+  gap:6px;
+  min-width:0;
+}
+.top-tools .language-switch{
+  grid-column:1/-1;
+  grid-row:1;
+  justify-self:end;
+  order:0;
+  margin-bottom:2px;
+}
+.top-tools .bgm-game-door,
+.top-tools .bgm-survey-door{
+  min-width:0;
+  min-height:38px;
+  padding:6px 7px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:3px;
+  border-radius:12px;
+  white-space:normal;
+  text-align:center;
+  line-height:1.15;
+  font-size:9px;
+  letter-spacing:.1px;
+  box-shadow:0 4px 12px #8f12321c;
+}
+.top-tools .bgm-game-door{grid-column:1;grid-row:2}
+.top-tools #bgmSurveyDoor{grid-column:2;grid-row:2}
+.top-tools #bgmCheckinDoor{grid-column:3;grid-row:2}
+.top-tools .edition{display:none}
+.top-tools .language-switch{gap:3px;padding:3px}
+.top-tools .lang-btn{padding:6px 10px;font-size:10px}
+@media(max-width:520px){
+  .top{align-items:center;gap:10px;margin-bottom:22px}
+  .brand{gap:8px}
+  .brand-mark{width:38px;height:38px;font-size:14px}
+  .brand-name{font-size:18px}
+  .brand-sub{font-size:9px;letter-spacing:3px}
+  .top-tools{flex:1 1 100%;width:100%;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .top-tools .bgm-game-door,
+  .top-tools .bgm-survey-door{min-height:42px;font-size:9px}
+}
+@media(min-width:521px){
+  .top{flex-wrap:nowrap}
+  .top-tools{flex:0 1 390px}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
