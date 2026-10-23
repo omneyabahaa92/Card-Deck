@@ -77,6 +77,20 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-survey-form{max-width:540px;margin:22px auto 4px;padding:clamp(16px,4vw,24px);border:1px solid #704052;border-radius:17px;background:#fff2df;color:#210c12}
 .bgm-survey-form label{display:block;font-size:12px;font-weight:850;margin:12px 0 6px}
 .bgm-survey-form input{width:100%;border:1px solid #d4bbc2;border-radius:10px;padding:13px;font:inherit;background:#fffaf4;color:#32131e}
+.bgm-survey-question{border:1px solid #d4bbc2;border-radius:12px;padding:12px 13px 10px;margin:17px 0;background:#fffaf4}
+.bgm-survey-question legend{font-size:12px;font-weight:900;padding:0 5px;line-height:1.45}
+.bgm-survey-form .bgm-survey-choice{display:flex;align-items:center;gap:9px;margin:10px 0;font-weight:600;line-height:1.4}
+.bgm-survey-form .bgm-survey-choice input,.bgm-survey-rating input{width:17px;height:17px;flex:0 0 auto;accent-color:#8f1232;margin:0}
+.bgm-survey-rating{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:8px}
+.bgm-survey-rating label{margin:0;cursor:pointer}
+.bgm-survey-rating label span{display:grid;place-items:center;min-height:43px;border:1px solid #d4bbc2;border-radius:10px;background:#fff;color:#32131e;font-weight:900}
+.bgm-survey-rating input{position:absolute;opacity:0;width:1px;height:1px}
+.bgm-survey-rating input:checked+span{background:#8f1232;color:white;border-color:#8f1232;box-shadow:0 0 0 2px #8f123233}
+.bgm-survey-rating input:focus-visible+span{outline:3px solid #ffd6a3;outline-offset:2px}
+.bgm-survey-rating-ends{display:flex;justify-content:space-between;gap:10px;color:#755c62;font-size:10px;margin-top:7px}
+.bgm-survey-form textarea{width:100%;border:1px solid #d4bbc2;border-radius:10px;padding:13px;font:inherit;background:#fffaf4;color:#32131e;resize:vertical}
+[dir=rtl] .bgm-survey-question{text-align:right}
+[dir=rtl] .bgm-survey-rating-ends{direction:rtl}
 .bgm-survey-privacy{font-size:11px;line-height:1.5;color:#755c62;margin:12px 0}
 .bgm-survey-form .btn{width:100%;margin-top:5px}
 .bgm-survey-status{font-size:12px;line-height:1.5;color:#7b1835;margin-top:12px;overflow-wrap:anywhere}
@@ -153,9 +167,39 @@ body.quest-open .quest-panel{margin-top:0}
     <form id="bgmSurveyForm" class="bgm-survey-form" method="POST" target="bgmSurveyPostTarget">
       <label for="bgmSurveyName" id="bgmSurveyNameLabel">Name</label><input id="bgmSurveyName" name="name" type="text" maxlength="100" autocomplete="name" required />
       <label for="bgmSurveyPhone" id="bgmSurveyPhoneLabel">WhatsApp number</label><input id="bgmSurveyPhone" name="whatsapp" type="tel" maxlength="30" autocomplete="tel" placeholder="+20..." required />
+
+      <fieldset class="bgm-survey-question"><legend id="bgmSurveyGoodTimeLabel">Did you have a good time today?</legend>
+        <label class="bgm-survey-choice"><input type="radio" name="good_time" value="Yes" required /><span id="bgmSurveyGoodTimeYes">Yes, absolutely!</span></label>
+        <label class="bgm-survey-choice"><input type="radio" name="good_time" value="Somewhat" /><span id="bgmSurveyGoodTimeSomewhat">It was okay</span></label>
+        <label class="bgm-survey-choice"><input type="radio" name="good_time" value="No" /><span id="bgmSurveyGoodTimeNo">Not really</span></label>
+      </fieldset>
+
+      <fieldset class="bgm-survey-question"><legend id="bgmSurveyConnectionLabel">Did you make a useful connection today?</legend>
+        <label class="bgm-survey-choice"><input type="radio" name="made_connection" value="Yes" required /><span id="bgmSurveyConnectionYes">Yes</span></label>
+        <label class="bgm-survey-choice"><input type="radio" name="made_connection" value="Not yet" /><span id="bgmSurveyConnectionNotYet">Not yet</span></label>
+      </fieldset>
+
+      <fieldset class="bgm-survey-question"><legend id="bgmSurveyExchangeLabel">Did you exchange contact details with someone?</legend>
+        <label class="bgm-survey-choice"><input type="radio" name="exchanged_number" value="Yes" required /><span id="bgmSurveyExchangeYes">Yes</span></label>
+        <label class="bgm-survey-choice"><input type="radio" name="exchanged_number" value="No" /><span id="bgmSurveyExchangeNo">No</span></label>
+      </fieldset>
+
+      <fieldset class="bgm-survey-question"><legend id="bgmSurveyLikelihoodLabel">How likely are you to attend our next meetup?</legend>
+        <div class="bgm-survey-rating" role="group" aria-label="Likelihood from 1 to 5">
+          <label><input type="radio" name="next_meetup_likelihood" value="1" required /><span>1</span></label>
+          <label><input type="radio" name="next_meetup_likelihood" value="2" /><span>2</span></label>
+          <label><input type="radio" name="next_meetup_likelihood" value="3" /><span>3</span></label>
+          <label><input type="radio" name="next_meetup_likelihood" value="4" /><span>4</span></label>
+          <label><input type="radio" name="next_meetup_likelihood" value="5" /><span>5</span></label>
+        </div>
+        <div class="bgm-survey-rating-ends"><span id="bgmSurveyLikelihoodLow">Not likely</span><span id="bgmSurveyLikelihoodHigh">Very likely</span></div>
+      </fieldset>
+
+      <label for="bgmSurveyComments" id="bgmSurveyCommentsLabel">Anything else you'd like to share? (Optional)</label>
+      <textarea id="bgmSurveyComments" name="comments" rows="4" maxlength="1500" placeholder="Suggestions, feedback, or anything we should know…"></textarea>
       <input type="hidden" name="source" value="BGM Conversation Cards" />
       <p class="bgm-survey-privacy" id="bgmSurveyPrivacy">Your WhatsApp number is for BGM follow-up and won't be displayed publicly.</p>
-      <button class="btn btn-primary" id="bgmSurveySubmit" type="submit">Submit</button><div class="bgm-survey-status" id="bgmSurveyStatus" role="status" aria-live="polite"></div>
+      <button class="btn btn-primary" id="bgmSurveySubmit" type="submit">Submit feedback</button><div class="bgm-survey-status" id="bgmSurveyStatus" role="status" aria-live="polite"></div>
     </form>
     <iframe name="bgmSurveyPostTarget" title="Survey submission response" hidden></iframe>
     <div class="bgm-survey-setup" id="bgmSurveySetup" hidden>Survey saving isn't configured yet. The organizer needs to connect the Google Sheets endpoint in the page settings.</div>
@@ -393,7 +437,22 @@ function applyLanguage(lang){
  document.getElementById('bgmSurveyNameLabel').textContent=lang==='ar'?'الاسم':'Name';
  document.getElementById('bgmSurveyPhoneLabel').textContent=lang==='ar'?'رقم WhatsApp':'WhatsApp number';
  document.getElementById('bgmSurveyPrivacy').textContent=lang==='ar'?'رقم WhatsApp هيُستخدم للتواصل بخصوص أنشطة BGM ومش هيظهر للعامة.':'Your WhatsApp number is for BGM follow-up and won’t be displayed publicly.';
- document.getElementById('bgmSurveySubmit').textContent=lang==='ar'?'إرسال':'Submit';
+ document.getElementById('bgmSurveySubmit').textContent=lang==='ar'?'إرسال الإجابات':'Submit feedback';
+ document.getElementById('bgmSurveyGoodTimeLabel').textContent=lang==='ar'?'اتبسطت النهارده؟':'Did you have a good time today?';
+ document.getElementById('bgmSurveyGoodTimeYes').textContent=lang==='ar'?'آه جدًا!':'Yes, absolutely!';
+ document.getElementById('bgmSurveyGoodTimeSomewhat').textContent=lang==='ar'?'كان يوم لطيف إلى حد ما':'It was okay';
+ document.getElementById('bgmSurveyGoodTimeNo').textContent=lang==='ar'?'مش أوي':'Not really';
+ document.getElementById('bgmSurveyConnectionLabel').textContent=lang==='ar'?'عملت connection مفيدة النهارده؟':'Did you make a useful connection today?';
+ document.getElementById('bgmSurveyConnectionYes').textContent=lang==='ar'?'أيوه':'Yes';
+ document.getElementById('bgmSurveyConnectionNotYet').textContent=lang==='ar'?'لسه لأ':'Not yet';
+ document.getElementById('bgmSurveyExchangeLabel').textContent=lang==='ar'?'بدّلت بيانات التواصل مع حد؟':'Did you exchange contact details with someone?';
+ document.getElementById('bgmSurveyExchangeYes').textContent=lang==='ar'?'أيوه':'Yes';
+ document.getElementById('bgmSurveyExchangeNo').textContent=lang==='ar'?'لأ':'No';
+ document.getElementById('bgmSurveyLikelihoodLabel').textContent=lang==='ar'?'احتمال تحضر الـ meetup الجاي قد إيه؟':'How likely are you to attend our next meetup?';
+ document.getElementById('bgmSurveyLikelihoodLow').textContent=lang==='ar'?'مش غالبًا':'Not likely';
+ document.getElementById('bgmSurveyLikelihoodHigh').textContent=lang==='ar'?'غالبًا جدًا':'Very likely';
+ document.getElementById('bgmSurveyCommentsLabel').textContent=lang==='ar'?'في أي حاجة تانية حابب تقولها؟ (اختياري)':'Anything else you’d like to share? (Optional)';
+ document.getElementById('bgmSurveyComments').placeholder=lang==='ar'?'اقتراحات أو ملاحظات أو أي حاجة تحب نعرفها…':'Suggestions, feedback, or anything we should know…';
  drawBtn.textContent=tr('draw'); resetBtn.textContent=tr('shuffle'); document.getElementById('backBtn').textContent=tr('back');
  document.getElementById('footerNote').innerHTML=tr('footer');
  document.getElementById('quickfireToggle').textContent=quickfireEnabled?tr('quickfireOn'):tr('quickfireOff');
