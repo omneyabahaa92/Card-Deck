@@ -286,6 +286,31 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-survey-form input[hidden],
 .bgm-survey-form button[hidden]{display:none!important}
 
+/* Transform submission confirmations into collectible BGM keepsake cards */
+.bgm-survey-status.bgm-thankyou-card{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:11px;min-height:260px;margin:16px 0 4px;padding:30px 22px;
+  border:1px solid var(--thanks-frame);border-radius:20px;
+  background:radial-gradient(ellipse at 50% 35%,var(--thanks-glow),transparent 62%),linear-gradient(145deg,var(--thanks-base),#170a13 88%);
+  color:var(--thanks-text);text-align:center;
+  box-shadow:inset 0 0 0 4px #ffffff0b,inset 0 0 0 7px #ffffff05,0 14px 32px #0005;
+  animation:bgmCardReveal .65s cubic-bezier(.2,.8,.2,1) both;
+}
+.bgm-survey-status.bgm-thankyou-card:before{content:"";position:absolute;inset:8px;border:1px solid var(--thanks-frame);border-radius:13px;opacity:.7;pointer-events:none}
+.bgm-survey-status.bgm-thankyou-card:after{content:"";position:absolute;inset:-50% -100%;background:linear-gradient(110deg,transparent 42%,#ffffff16 49%,#ffffff55 50%,#ffffff10 52%,transparent 59%);transform:translateX(-70%) rotate(8deg);animation:bgmCardShine 1.25s .2s ease-out both;pointer-events:none}
+.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-stamp,.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-symbol,.bgm-survey-status.bgm-thankyou-card strong,.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-message,.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-tagline{position:relative;z-index:1}
+.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-stamp{font-size:10px;font-weight:900;letter-spacing:3px;opacity:.9}
+.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-symbol{display:grid;place-items:center;width:56px;height:56px;border:1px solid var(--thanks-frame);border-radius:50%;font-size:34px;line-height:1;box-shadow:0 0 26px var(--thanks-glow),inset 0 0 15px var(--thanks-glow)}
+.bgm-survey-status.bgm-thankyou-card strong{max-width:360px;font-size:clamp(20px,5vw,27px);line-height:1.2}
+.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-message{font-size:16px;font-weight:650}
+.bgm-survey-status.bgm-thankyou-card .bgm-thankyou-tagline{max-width:320px;font-size:13px;line-height:1.5;opacity:.9}
+.bgm-survey-status.bgm-survey-thankyou{--thanks-base:#4b1830;--thanks-glow:#f4b9d866;--thanks-frame:#f5c2da;--thanks-text:#fff0f6}
+.bgm-survey-status.bgm-checkin-thankyou{--thanks-base:#39234c;--thanks-glow:#d5a5ff55;--thanks-frame:#d9b7ff;--thanks-text:#f8edff}
+@keyframes bgmCardReveal{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes bgmCardShine{from{transform:translateX(-70%) rotate(8deg)}to{transform:translateX(70%) rotate(8deg)}}
+@media(prefers-reduced-motion:reduce){.bgm-survey-status.bgm-thankyou-card,.bgm-survey-status.bgm-thankyou-card:after{animation:none}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -791,10 +816,10 @@ bgmSurveyPostFrame.addEventListener('load',function(){
   bgmCheckinForm.reset();
   [...bgmCheckinForm.querySelectorAll('label[for],input:not([type="hidden"]),button')].forEach(el=>el.hidden=true);
   const checkinStatus=document.getElementById('bgmCheckinStatus');
-  checkinStatus.classList.add('bgm-submit-success');
-  checkinStatus.textContent=language==='ar'
-    ? 'اتسجلت! 🎉 وجودك هو اللي بيكمّل الصورة. يلا نعمل Connections أحلى في الـ Meetup الجاي!'
-    : 'You’re on the list! 🎉 BGM is better with you in the room. See you at the next meetup—bring your curiosity and your best ideas!';
+  checkinStatus.classList.add('bgm-submit-success','bgm-thankyou-card','bgm-checkin-thankyou');
+  checkinStatus.innerHTML=language==='ar'
+    ? '<span class="bgm-thankyou-stamp">BGM ✦ CHECKED IN</span><span class="bgm-thankyou-symbol" aria-hidden="true">✦</span><strong>وصلت ونوّرت! 🎉</strong><span class="bgm-thankyou-message">كده بقيت جزء من الحكاية.</span><span class="bgm-thankyou-tagline">اتعرّف على ناس جديدة، شارك فكرة، وامشي بإلهام جديد.</span>'
+    : '<span class="bgm-thankyou-stamp">BGM ✦ CHECKED IN</span><span class="bgm-thankyou-symbol" aria-hidden="true">✦</span><strong>You made it. Let’s make it count! 🎉</strong><span class="bgm-thankyou-message">You’re officially part of today’s BGM story.</span><span class="bgm-thankyou-tagline">Meet someone new. Share an idea. Leave inspired.</span>';
   checkinStatus.scrollIntoView({behavior:'smooth',block:'center'});
 });
 bgmCheckinForm.addEventListener('submit',function(event){
@@ -853,11 +878,12 @@ bgmSurveyFrame.addEventListener('load',function(){
   bgmSurveySubmit.disabled=false;
   bgmSurveySubmit.textContent=bgmSurveySubmitLabel;
   bgmSurveySteps.forEach(step=>{step.hidden=true;});
-  document.getElementById('bgmSurveyStatus').classList.add('bgm-submit-success');
-  document.getElementById('bgmSurveyStatus').textContent=language==='ar'
-    ? 'شكراً إنك جزء من BGM ❤️ أشوفكم في الـ Meetup الجاي!'
-    : 'Thank you for being part of BGM ❤️ See you at our next meetup!';
-  document.getElementById('bgmSurveyStatus').scrollIntoView({behavior:'smooth',block:'center'});
+  const surveyStatus=document.getElementById('bgmSurveyStatus');
+  surveyStatus.classList.add('bgm-submit-success','bgm-thankyou-card','bgm-survey-thankyou');
+  surveyStatus.innerHTML=language==='ar'
+    ? '<span class="bgm-thankyou-stamp">BGM ✦ MEETUP</span><span class="bgm-thankyou-symbol" aria-hidden="true">✧</span><strong>وجودك بيخلّي BGM أحلى ❤️</strong><span class="bgm-thankyou-message">أشوفك في الـ Meetup الجاي.</span><span class="bgm-thankyou-tagline">هات إلهامك، اتلهم، أو خليك سبب إلهام لحد تاني.</span>'
+    : '<span class="bgm-thankyou-stamp">BGM ✦ MEETUP</span><span class="bgm-thankyou-symbol" aria-hidden="true">✧</span><strong>BGM is better with you in the room.</strong><span class="bgm-thankyou-message">See you at the next meetup.</span><span class="bgm-thankyou-tagline">Bring inspiration. Be inspired. Inspire someone.</span>';
+  surveyStatus.scrollIntoView({behavior:'smooth',block:'center'});
 });
 bgmSurveyForm.addEventListener('submit',function(event){
   if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(BGM_SURVEY_ENDPOINT)){
