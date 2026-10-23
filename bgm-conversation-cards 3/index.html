@@ -183,6 +183,79 @@ body.quest-open .quest-panel{margin-top:0}
   .top-tools{flex:0 1 390px}
 }
 
+/* Mini trading-card action buttons */
+.top-tools .mini-action-card{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  aspect-ratio:1.16 / 1;
+  width:76px;
+  min-width:76px;
+  min-height:0;
+  padding:7px 5px 6px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  border-radius:8px;
+  border-width:1px;
+  text-align:center;
+  white-space:normal;
+  line-height:1.08;
+  box-shadow:inset 0 0 0 2px #fff1, inset 0 0 16px var(--card-glow), 0 4px 12px #0006;
+  background:
+    radial-gradient(ellipse at 50% 35%,var(--card-glow),transparent 66%),
+    linear-gradient(145deg,var(--card-deep),#10080d 78%);
+}
+.top-tools .mini-action-card:before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border:1px solid var(--card-frame);
+  border-radius:5px;
+  pointer-events:none;
+  opacity:.85;
+}
+.top-tools .mini-action-card:after{
+  content:"";
+  position:absolute;
+  width:36px;height:36px;
+  top:12px;left:50%;
+  transform:translateX(-50%) rotate(45deg);
+  border:1px solid var(--card-frame);
+  opacity:.18;
+  pointer-events:none;
+}
+.top-tools .mini-action-challenge{--card-deep:#4a160d;--card-glow:#ffb84d55;--card-frame:#f3bf70;color:#ffe4b0;border-color:#d98a43}
+.top-tools .mini-action-survey{--card-deep:#102a4d;--card-glow:#7ac8ff55;--card-frame:#a8dcff;color:#d8efff;border-color:#559bdb}
+.top-tools .mini-action-checkin{--card-deep:#0d3a2c;--card-glow:#72e4b355;--card-frame:#a0f0c9;color:#d5ffea;border-color:#4eb88d}
+.top-tools .mini-action-icon{
+  position:relative;z-index:1;
+  display:grid;place-items:center;
+  width:25px;height:25px;
+  border:1px solid currentColor;border-radius:50%;
+  font-size:17px;line-height:1;
+  text-shadow:0 0 9px var(--card-glow);
+}
+.top-tools .mini-action-label{
+  position:relative;z-index:1;
+  max-width:100%;
+  font-size:8px;font-weight:900;
+  letter-spacing:.15px;text-transform:uppercase;
+}
+.top-tools .mini-action-number{
+  position:absolute;top:6px;right:7px;z-index:1;
+  font-size:7px;letter-spacing:.4px;opacity:.8;
+}
+.top-tools .mini-action-card:hover{transform:translateY(-2px);filter:brightness(1.12)}
+.top-tools .mini-action-card:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:520px){
+  .top-tools{grid-template-columns:repeat(3,76px);justify-content:end;gap:7px}
+  .top-tools .mini-action-card{width:76px;min-width:76px;min-height:0;aspect-ratio:1.16/1}
+  .top-tools .language-switch{grid-column:1/-1}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -193,7 +266,7 @@ body.quest-open .quest-panel{margin-top:0}
       <div class="brand-mark">BGM</div>
       <div><div class="brand-name">BGM</div><div class="brand-sub">MEETUP</div></div>
     </div>
-    <div class="top-tools"><button class="bgm-game-door" id="bgmGameDoor" type="button">↗ <span id="bgmGameDoorLabel">Join Daily Challenge</span></button><button class="bgm-survey-door" id="bgmSurveyDoor" type="button">↗ <span id="bgmSurveyDoorLabel">Member Survey</span></button><button class="bgm-survey-door" id="bgmCheckinDoor" type="button">✓ <span id="bgmCheckinDoorLabel">Check In</span></button><div class="edition" id="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div><div class="language-switch" role="group" aria-label="Language"><button class="lang-btn" id="langEn" type="button" aria-pressed="true">EN</button><button class="lang-btn" id="langAr" type="button" aria-pressed="false">عربي</button></div></div>
+    <div class="top-tools"><button class="bgm-game-door mini-action-card mini-action-challenge" id="bgmGameDoor" type="button"><span class="mini-action-icon" aria-hidden="true">✦</span><span class="mini-action-label" id="bgmGameDoorLabel">Daily Challenge</span><span class="mini-action-number" aria-hidden="true">01</span></button><button class="bgm-survey-door mini-action-card mini-action-survey" id="bgmSurveyDoor" type="button"><span class="mini-action-icon" aria-hidden="true">✧</span><span class="mini-action-label" id="bgmSurveyDoorLabel">Member Survey</span><span class="mini-action-number" aria-hidden="true">02</span></button><button class="bgm-survey-door mini-action-card mini-action-checkin" id="bgmCheckinDoor" type="button"><span class="mini-action-icon" aria-hidden="true">◈</span><span class="mini-action-label" id="bgmCheckinDoorLabel">Check In</span><span class="mini-action-number" aria-hidden="true">03</span></button><div class="edition" id="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div><div class="language-switch" role="group" aria-label="Language"><button class="lang-btn" id="langEn" type="button" aria-pressed="true">EN</button><button class="lang-btn" id="langAr" type="button" aria-pressed="false">عربي</button></div></div>
   </header>
   <section class="hero">
     <div class="eyebrow" id="eyebrow">GOOD CONVERSATIONS. REAL CONNECTIONS.</div>
