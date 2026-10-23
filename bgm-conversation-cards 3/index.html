@@ -68,13 +68,16 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-survey-door:hover{background:#4a1428;border-color:#ffb9c8}
 .bgm-survey-panel{margin:22px 0 30px;border:1px solid #8d5570;border-radius:22px;padding:clamp(17px,4vw,28px);background:radial-gradient(circle at 100% 0%,#4a1930,transparent 46%),linear-gradient(145deg,#1e0e16,#10080b);color:var(--cream)}
 .bgm-survey-panel[hidden]{display:none!important}
-.bgm-survey-open .bgm-survey-panel{display:block!important;margin-top:0}
+/* Survey and check-in are exclusive views. Hidden panels must stay hidden. */
+#bgmSurveyPanel[hidden],
+#bgmCheckinPanel[hidden]{display:none!important}
+.bgm-survey-open #bgmSurveyPanel:not([hidden]){display:block!important;margin-top:0}
+.bgm-survey-open #bgmCheckinPanel{display:none!important}
 .bgm-survey-open .hero,.bgm-survey-open #sectionLabel,.bgm-survey-open #decks,.bgm-survey-open #miniDecks,.bgm-survey-open #cardWrap,.bgm-survey-open #quickfireBar,.bgm-survey-open #controls,.bgm-survey-open #toast,.bgm-survey-open #footerNote,.bgm-survey-open .quest-panel,.bgm-survey-open .bgm-game-panel{display:none!important}
-.bgm-survey-open .bgm-survey-panel[hidden]{display:block!important}
 
-.bgm-checkin-open .bgm-survey-panel{display:block!important;margin-top:0}
-.bgm-checkin-open .hero,.bgm-checkin-open #sectionLabel,.bgm-checkin-open #decks,.bgm-checkin-open #miniDecks,.bgm-checkin-open #cardWrap,.bgm-checkin-open #quickfireBar,.bgm-checkin-open #controls,.bgm-checkin-open #toast,.bgm-checkin-open #footerNote,.bgm-checkin-open .quest-panel,.bgm-checkin-open .bgm-game-panel,.bgm-checkin-open #bgmSurveyPanel{display:none!important}
-.bgm-checkin-open #bgmCheckinPanel[hidden]{display:block!important}
+.bgm-checkin-open #bgmCheckinPanel:not([hidden]){display:block!important;margin-top:0}
+.bgm-checkin-open #bgmSurveyPanel{display:none!important}
+.bgm-checkin-open .hero,.bgm-checkin-open #sectionLabel,.bgm-checkin-open #decks,.bgm-checkin-open #miniDecks,.bgm-checkin-open #cardWrap,.bgm-checkin-open #quickfireBar,.bgm-checkin-open #controls,.bgm-checkin-open #toast,.bgm-checkin-open #footerNote,.bgm-checkin-open .quest-panel,.bgm-checkin-open .bgm-game-panel{display:none!important}
 
 .bgm-survey-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
 .bgm-survey-head h2{font-size:clamp(25px,5vw,36px);margin:8px 0;letter-spacing:-1px}
@@ -739,8 +742,9 @@ document.getElementById('bgmSurveyDoor').addEventListener('click',openBgmSurvey)
 function openBgmCheckin(){
   stopQuickfire();
   document.body.classList.remove('deck-open','quest-open','bgm-game-open','bgm-survey-open');
-  document.body.classList.add('bgm-checkin-open');
+  document.getElementById('bgmSurveyPanel').hidden=true;
   document.getElementById('bgmCheckinPanel').hidden=false;
+  document.body.classList.add('bgm-checkin-open');
   document.getElementById('bgmCheckinStatus').textContent='';
   document.getElementById('bgmCheckinPanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
