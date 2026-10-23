@@ -516,7 +516,7 @@ qel('questNext').addEventListener('click',()=>{
 qel('questReplay').addEventListener('click',()=>{questIndex=0;questSelected=null;questAnswered=false;renderQuestChallenge();});
 
 const BGM_SURVEY_ENDPOINT = "https://script.google.com/macros/s/AKfycbxlVC2cu09dNKygKWa3s6-ae_e8DMZ750tKpIvMK4BvvG1oko5zxRDmDUGxuYjmNl-r/exec";
-function openBgmSurvey(){stopQuickfire();document.body.classList.remove('deck-open','quest-open','bgm-game-open');document.body.classList.add('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=false;document.getElementById('bgmSurveyStatus').textContent='';document.getElementById('bgmSurveySetup').hidden=/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT)===false;document.getElementById('bgmSurveyPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function openBgmSurvey(){stopQuickfire();document.body.classList.remove('deck-open','quest-open','bgm-game-open');document.body.classList.add('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=false;document.getElementById('bgmSurveyStatus').textContent='';document.getElementById('bgmSurveySetup').hidden=/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT);document.getElementById('bgmSurveyPanel').scrollIntoView({behavior:'smooth',block:'start'});}
 function closeBgmSurvey(){document.body.classList.remove('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=true;if(selected)document.body.classList.add('deck-open');window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('bgmSurveyDoor').addEventListener('click',openBgmSurvey);
 document.getElementById('bgmSurveyClose').addEventListener('click',closeBgmSurvey);
