@@ -504,6 +504,21 @@ body.quest-open .quest-panel{margin-top:0}
 .top-tools .mini-action-hero{background-image:linear-gradient(180deg,#21091420,#10060d45),url("assets/bgm-site-assets/survey-thank-you.webp")!important;background-size:cover!important;background-position:center!important}
 @media(max-width:650px){.top-tools #bgmHeroDoor{grid-column:5!important;grid-row:1!important}.bgm-hero-panel{margin:18px 0}}
 
+/* BGM live Hero leaderboard */
+.bgm-hero-leaderboard{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px;margin:-9px auto 22px;padding:10px 12px;border:1px solid #714052;border-radius:13px;background:linear-gradient(135deg,#1b0b12,#2b101b 55%,#180910);box-shadow:0 8px 24px #0002}
+.bgm-hero-leaderboard[hidden]{display:none!important}
+.bgm-hero-leaderboard-heading{display:flex;flex-direction:column;gap:4px;white-space:nowrap}
+.bgm-hero-leaderboard-kicker{font-size:9px;font-weight:900;letter-spacing:1px;color:#ffb9c8}
+.bgm-hero-leaderboard-heading strong{font-size:10px;letter-spacing:1px;color:#ffd28c}
+.bgm-hero-leaderboard-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;min-width:0}
+.bgm-hero-leader{display:flex;align-items:center;gap:7px;min-width:0;padding:7px 8px;border:1px solid #593044;border-radius:9px;background:#160910}
+.bgm-hero-leader-rank{display:grid;place-items:center;flex:0 0 22px;height:22px;border-radius:7px;background:#3a1726;color:#ffd28c;font-size:11px;font-weight:950}
+.bgm-hero-leader:first-child .bgm-hero-leader-rank{background:#ffd28c;color:#32101b}
+.bgm-hero-leader-name{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff2df;font-size:11px;font-weight:850}
+.bgm-hero-leader-count{display:block;margin-top:2px;color:#cdb9bd;font-size:9px;white-space:nowrap}
+[dir=rtl] .bgm-hero-leaderboard{direction:rtl}
+@media(max-width:560px){.bgm-hero-leaderboard{grid-template-columns:1fr;gap:8px;margin:-10px auto 18px}.bgm-hero-leaderboard-heading{flex-direction:row;align-items:center;justify-content:space-between}.bgm-hero-leaderboard-list{gap:5px}.bgm-hero-leader{gap:5px;padding:6px 5px}.bgm-hero-leader-rank{flex-basis:19px;height:19px}.bgm-hero-leader-name{font-size:10px}.bgm-hero-leader-count{font-size:8px}}
+
 /* BGM live Hero ribbon */
 .bgm-hero-ribbon{display:none;position:relative;overflow:hidden;margin:0 auto 20px;border:1px solid #714052;border-radius:13px;background:linear-gradient(90deg,#240d17,#391222 50%,#240d17);min-height:44px;align-items:center;gap:12px;padding:0 12px;box-shadow:0 8px 24px #0002}
 .bgm-hero-ribbon.has-names{display:flex}
@@ -579,6 +594,14 @@ body.quest-open .quest-panel{margin-top:0}
   <section class="bgm-hero-ribbon" id="bgmHeroRibbon" aria-label="BGM Heroes of the Day" aria-live="polite">
     <span class="bgm-hero-ribbon-label" id="bgmHeroRibbonLabel">✨ BGM HEROES</span>
     <div class="bgm-hero-ribbon-window"><div class="bgm-hero-ribbon-track" id="bgmHeroRibbonTrack"></div></div>
+  </section>
+
+  <section class="bgm-hero-leaderboard" id="bgmHeroLeaderboard" aria-label="Top 3 BGM Heroes" hidden>
+    <div class="bgm-hero-leaderboard-heading">
+      <span class="bgm-hero-leaderboard-kicker">🏆 BGM SPOTLIGHT</span>
+      <strong id="bgmHeroLeaderboardTitle">TOP 3 HEROES</strong>
+    </div>
+    <div class="bgm-hero-leaderboard-list" id="bgmHeroLeaderboardList"></div>
   </section>
 
   <section class="hero">
@@ -1069,11 +1092,14 @@ const BGM_SURVEY_ENDPOINT = "https://script.google.com/macros/s/AKfycbytk4h4ynqX
 /* Live Hero ribbon: JSONP lets the static Vercel page read the public Apps Script feed without CORS fetch issues. */
 const BGM_HERO_FEED_POLL_MS = 10000;
 let bgmHeroFeedNames = [];
+let bgmHeroLeaderboardData = [];
 window.bgmHeroFeedCallback = function(payload){
   if(!payload || payload.ok !== true || !Array.isArray(payload.heroes)) return;
   const names = payload.heroes.map(item => String(item.hero_name || item.name || '').trim()).filter(Boolean).slice(0,100);
   bgmHeroFeedNames = names;
+  bgmHeroLeaderboardData = Array.isArray(payload.leaderboard) ? payload.leaderboard.slice(0,3) : [];
   renderBgmHeroRibbon();
+  renderBgmHeroLeaderboard();
 };
 function renderBgmHeroRibbon(){
   const ribbon=document.getElementById('bgmHeroRibbon');
@@ -1094,6 +1120,28 @@ function renderBgmHeroRibbon(){
   });
   track.replaceChildren(...makeNames(),...makeNames());
   ribbon.classList.add('has-names');
+}
+function renderBgmHeroLeaderboard(){
+  const panel=document.getElementById('bgmHeroLeaderboard');
+  const list=document.getElementById('bgmHeroLeaderboardList');
+  const title=document.getElementById('bgmHeroLeaderboardTitle');
+  if(!panel || !list) return;
+  const leaders=bgmHeroLeaderboardData.map(item=>({
+    name:String(item.hero_name || item.name || '').trim(),
+    count:Number(item.count || item.nominations || item.votes || 0)
+  })).filter(item=>item.name && item.count>0).sort((a,b)=>b.count-a.count).slice(0,3);
+  if(!leaders.length){panel.hidden=true;list.replaceChildren();return;}
+  if(title) title.textContent=language==='ar'?'أفضل ٣ أبطال':'TOP 3 HEROES';
+  list.replaceChildren(...leaders.map((item,index)=>{
+    const card=document.createElement('div');card.className='bgm-hero-leader';
+    const rank=document.createElement('span');rank.className='bgm-hero-leader-rank';rank.textContent=String(index+1);
+    const info=document.createElement('div');info.style.minWidth='0';
+    const name=document.createElement('span');name.className='bgm-hero-leader-name';name.textContent=item.name;
+    const count=document.createElement('span');count.className='bgm-hero-leader-count';
+    count.textContent=language==='ar'?(item.count+' ترشيح'):(item.count+' nomination'+(item.count===1?'':'s'));
+    info.append(name,count);card.append(rank,info);return card;
+  }));
+  panel.hidden=false;
 }
 function loadBgmHeroRibbon(){
   if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(BGM_SURVEY_ENDPOINT)) return;
