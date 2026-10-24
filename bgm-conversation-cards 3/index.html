@@ -515,9 +515,9 @@ body.quest-open .quest-panel{margin-top:0}
   const skip=document.getElementById('bgmIntroSkip');
   if(!intro||!skip)return;
   let seen=false;
-  try{seen=localStorage.getItem('bgm-dragon-intro-seen')==='1';}catch(e){}
+  try{seen=localStorage.getItem('bgm-fire-intro-seen-v1')==='1';}catch(e){}
   if(seen){intro.hidden=true;return;}
-  try{localStorage.setItem('bgm-dragon-intro-seen','1');}catch(e){}
+  try{localStorage.setItem('bgm-fire-intro-seen-v1','1');}catch(e){}
   let dismissed=false;
   function dismiss(){
     if(dismissed)return;dismissed=true;
