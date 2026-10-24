@@ -452,10 +452,59 @@ body.quest-open .quest-panel{margin-top:0}
   .bgm-survey-status.bgm-thankyou-card{aspect-ratio:3 / 2!important}
 }
 
+
+/* First-visit dragon welcome */
+#bgmWelcomeIntro{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at center,#4b0718 0%,#19070d 48%,#080507 100%);opacity:1;visibility:visible;transition:opacity .75s ease,visibility .75s ease}
+#bgmWelcomeIntro.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+#bgmWelcomeIntro[hidden]{display:none}
+.bgm-intro-skip{position:absolute;top:max(22px,env(safe-area-inset-top));right:22px;border:1px solid #d9ad75;border-radius:999px;padding:9px 16px;background:#1b0a10cc;color:#f8dfb6;font-size:12px;letter-spacing:1px;z-index:3}
+.bgm-intro-stage{position:relative;width:min(88vw,520px);aspect-ratio:1;display:grid;place-items:center}
+.bgm-intro-orbit{position:absolute;inset:8%;border:1px solid #f3b65d99;border-radius:50%;box-shadow:0 0 26px #f08b2b22,inset 0 0 24px #f08b2b18;animation:bgmOrbit 3.2s ease-in-out both}
+.bgm-intro-orbit:before,.bgm-intro-orbit:after{content:"✦";position:absolute;color:#ffd78c;text-shadow:0 0 12px #ff8a27;font-size:18px}
+.bgm-intro-orbit:before{top:10%;left:17%}.bgm-intro-orbit:after{bottom:12%;right:13%}
+.bgm-intro-dragon{position:absolute;font-size:clamp(100px,25vw,170px);line-height:1;filter:drop-shadow(0 0 18px #ff3b45) drop-shadow(0 0 36px #ed7b27);animation:bgmDragonSwirl 3.2s cubic-bezier(.2,.65,.25,1) both;z-index:1}
+.bgm-intro-center{position:relative;z-index:2;text-align:center;opacity:0;transform:translateY(10px) scale(.94);animation:bgmWelcomeReveal .8s ease 1.65s forwards}
+.bgm-intro-mark{font-family:Georgia,serif;font-size:clamp(42px,10vw,64px);font-weight:700;letter-spacing:5px;color:#ffdda0;text-shadow:0 0 22px #ef6c32}
+.bgm-intro-title{margin-top:8px;font-size:clamp(20px,5vw,30px);letter-spacing:5px;font-weight:800;color:#fff0d9}
+.bgm-intro-tagline{margin-top:12px;color:#e7b97f;font-family:Georgia,serif;font-style:italic;font-size:clamp(12px,3vw,16px);letter-spacing:1px}
+.bgm-intro-spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#ffd98d;box-shadow:0 0 12px 3px #ff702b;animation:bgmSpark 2.5s ease-out both}
+.bgm-intro-spark.s1{top:17%;left:21%;animation-delay:.1s}.bgm-intro-spark.s2{top:27%;right:14%;animation-delay:.35s}.bgm-intro-spark.s3{bottom:18%;left:18%;animation-delay:.55s}.bgm-intro-spark.s4{bottom:23%;right:19%;animation-delay:.25s}
+@keyframes bgmDragonSwirl{0%{transform:translate(0,42%) rotate(-170deg) scale(.12);opacity:0}18%{opacity:1}72%{transform:translate(0,0) rotate(28deg) scale(1.12);opacity:1}100%{transform:translate(0,0) rotate(0) scale(.9);opacity:.92}}
+@keyframes bgmOrbit{0%{transform:rotate(-90deg) scale(.35);opacity:0}35%{opacity:1}100%{transform:rotate(270deg) scale(1);opacity:1}}
+@keyframes bgmWelcomeReveal{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes bgmSpark{0%{transform:scale(0);opacity:0}35%{opacity:1}100%{transform:scale(1.5);opacity:.3}}
+@media(prefers-reduced-motion:reduce){#bgmWelcomeIntro *{animation-duration:.01ms!important;animation-delay:0ms!important}#bgmWelcomeIntro{transition:none}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<div id="bgmWelcomeIntro" role="dialog" aria-label="Welcome to BGM" aria-modal="true">
+  <button class="bgm-intro-skip" id="bgmIntroSkip" type="button">Skip ›</button>
+  <div class="bgm-intro-stage" aria-hidden="true">
+    <div class="bgm-intro-orbit"></div><span class="bgm-intro-dragon">🐉</span>
+    <i class="bgm-intro-spark s1"></i><i class="bgm-intro-spark s2"></i><i class="bgm-intro-spark s3"></i><i class="bgm-intro-spark s4"></i>
+    <div class="bgm-intro-center"><div class="bgm-intro-mark">BGM ✦</div><div class="bgm-intro-title">WELCOME TO BGM</div><div class="bgm-intro-tagline">Where conversations spark connections.</div></div>
+  </div>
+</div>
+<script>
+(function(){
+  const intro=document.getElementById('bgmWelcomeIntro');
+  const skip=document.getElementById('bgmIntroSkip');
+  if(!intro||!skip)return;
+  let seen=false;
+  try{seen=localStorage.getItem('bgm-dragon-intro-seen')==='1';}catch(e){}
+  if(seen){intro.hidden=true;return;}
+  try{localStorage.setItem('bgm-dragon-intro-seen','1');}catch(e){}
+  let dismissed=false;
+  function dismiss(){
+    if(dismissed)return;dismissed=true;
+    intro.classList.add('is-leaving');
+    window.setTimeout(()=>{intro.hidden=true;},800);
+  }
+  skip.addEventListener('click',dismiss);
+  window.setTimeout(dismiss,4300);
+})();
+</script>
 <main class="shell">
   <header class="top">
     <div class="brand" aria-label="BGM Meetup">
