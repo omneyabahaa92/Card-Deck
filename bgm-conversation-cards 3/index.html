@@ -503,6 +503,22 @@ body.quest-open .quest-panel{margin-top:0}
 .top-tools #bgmHeroDoor{grid-column:5!important;grid-row:1!important}
 .top-tools .mini-action-hero{background-image:linear-gradient(180deg,#21091420,#10060d45),url("assets/bgm-site-assets/survey-thank-you.webp")!important;background-size:cover!important;background-position:center!important}
 @media(max-width:650px){.top-tools #bgmHeroDoor{grid-column:5!important;grid-row:1!important}.bgm-hero-panel{margin:18px 0}}
+
+/* BGM live Hero ribbon */
+.bgm-hero-ribbon{display:none;position:relative;overflow:hidden;margin:0 auto 20px;border:1px solid #714052;border-radius:13px;background:linear-gradient(90deg,#240d17,#391222 50%,#240d17);min-height:44px;align-items:center;gap:12px;padding:0 12px;box-shadow:0 8px 24px #0002}
+.bgm-hero-ribbon.has-names{display:flex}
+.bgm-hero-ribbon-label{position:relative;z-index:2;flex:0 0 auto;font-size:10px;font-weight:950;letter-spacing:1px;color:#ffd28c;white-space:nowrap}
+.bgm-hero-ribbon-window{min-width:0;overflow:hidden;flex:1;mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.bgm-hero-ribbon-track{display:flex;width:max-content;align-items:center;gap:26px;animation:bgmHeroRibbonMove 38s linear infinite}
+.bgm-hero-ribbon:hover .bgm-hero-ribbon-track{animation-play-state:paused}
+.bgm-hero-ribbon-name{display:inline-flex;align-items:center;gap:7px;color:#fff2df;font-size:12px;font-weight:800;white-space:nowrap}
+.bgm-hero-ribbon-name:before{content:"✦";color:#ff9db2}
+.bgm-hero-ribbon-note{font-size:10px;color:#d9c5c9;white-space:nowrap}
+@keyframes bgmHeroRibbonMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+[dir=rtl] .bgm-hero-ribbon-track{animation-name:bgmHeroRibbonMoveRtl}
+@keyframes bgmHeroRibbonMoveRtl{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.bgm-hero-ribbon-track{animation:none!important;flex-wrap:wrap;width:auto}.bgm-hero-ribbon-window{overflow:visible}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -559,6 +575,12 @@ body.quest-open .quest-panel{margin-top:0}
     </div>
     <div class="top-tools"><button class="bgm-game-door mini-action-card mini-action-challenge" id="bgmGameDoor" type="button" title="Daily Challenge" aria-label="Daily Challenge"><span class="mini-action-icon" aria-hidden="true">✦</span><span class="mini-action-label" id="bgmGameDoorLabel">Daily Challenge</span><span class="mini-action-number" aria-hidden="true">01</span></button><button class="bgm-survey-door mini-action-card mini-action-survey" id="bgmSurveyDoor" type="button" title="Member Survey" aria-label="Member Survey"><span class="mini-action-icon" aria-hidden="true">✧</span><span class="mini-action-label" id="bgmSurveyDoorLabel">Member Survey</span><span class="mini-action-number" aria-hidden="true">02</span></button><button class="bgm-survey-door mini-action-card mini-action-checkin" id="bgmCheckinDoor" type="button" title="Check In" aria-label="Check In"><span class="mini-action-icon" aria-hidden="true">◈</span><span class="mini-action-label" id="bgmCheckinDoorLabel">Check In</span><span class="mini-action-number" aria-hidden="true">03</span></button><button class="bgm-survey-door mini-action-card mini-action-hero" id="bgmHeroDoor" type="button" title="Hero of the Day" aria-label="Hero of the Day"><span class="mini-action-icon" aria-hidden="true">✦</span><span class="mini-action-label" id="bgmHeroDoorLabel">Hero of the Day</span><span class="mini-action-number" aria-hidden="true">04</span></button><div class="edition" id="edition">CONVERSATION CARD SYSTEM<br><strong>VOL. 01 · 50 PROMPTS</strong></div><div class="language-switch" role="group" aria-label="Language"><button class="lang-btn" id="langEn" type="button" aria-pressed="true">EN</button><button class="lang-btn" id="langAr" type="button" aria-pressed="false">عربي</button></div></div>
   </header>
+
+  <section class="bgm-hero-ribbon" id="bgmHeroRibbon" aria-label="BGM Heroes of the Day" aria-live="polite">
+    <span class="bgm-hero-ribbon-label" id="bgmHeroRibbonLabel">✨ BGM HEROES</span>
+    <div class="bgm-hero-ribbon-window"><div class="bgm-hero-ribbon-track" id="bgmHeroRibbonTrack"></div></div>
+  </section>
+
   <section class="hero">
     <div class="eyebrow" id="eyebrow">GOOD CONVERSATIONS. REAL CONNECTIONS.</div>
     <h1 id="heroTitle">Pick a deck.<br><span>Start something.</span></h1>
@@ -890,6 +912,7 @@ function applyLanguage(lang){
  document.getElementById('bgmSurveyDoorLabel').textContent=lang==='ar'?'استبيان الأعضاء':'Member Survey';
  document.getElementById('bgmCheckinDoorLabel').textContent=lang==='ar'?'تسجيل الحضور':'Check In';
   document.getElementById('bgmHeroDoorLabel').textContent=lang==='ar'?'بطل اليوم':'Hero of the Day';
+  renderBgmHeroRibbon();
   document.getElementById('bgmHeroDoor').title=lang==='ar'?'بطل اليوم':'Hero of the Day';
   document.getElementById('bgmHeroDoor').setAttribute('aria-label',lang==='ar'?'بطل اليوم':'Hero of the Day');
   document.getElementById('bgmHeroTitle').textContent=lang==='ar'?'بطل اليوم ✨':'Hero of the Day ✨';
@@ -1042,6 +1065,49 @@ qel('questNext').addEventListener('click',()=>{
 qel('questReplay').addEventListener('click',()=>{questIndex=0;questSelected=null;questAnswered=false;renderQuestChallenge();});
 
 const BGM_SURVEY_ENDPOINT = "https://script.google.com/macros/s/AKfycbytk4h4ynqXryxNbMFcd6hr-xLCCGQVG-sOeVE45jljtpnq0utnT7adt27FLzckXzY7/exec";
+
+/* Live Hero ribbon: JSONP lets the static Vercel page read the public Apps Script feed without CORS fetch issues. */
+const BGM_HERO_FEED_POLL_MS = 10000;
+let bgmHeroFeedNames = [];
+window.bgmHeroFeedCallback = function(payload){
+  if(!payload || payload.ok !== true || !Array.isArray(payload.heroes)) return;
+  const names = payload.heroes.map(item => String(item.hero_name || item.name || '').trim()).filter(Boolean).slice(0,100);
+  bgmHeroFeedNames = names;
+  renderBgmHeroRibbon();
+};
+function renderBgmHeroRibbon(){
+  const ribbon=document.getElementById('bgmHeroRibbon');
+  const track=document.getElementById('bgmHeroRibbonTrack');
+  if(!ribbon || !track) return;
+  if(!bgmHeroFeedNames.length){
+    ribbon.classList.remove('has-names');
+    track.replaceChildren();
+    return;
+  }
+  const label=document.getElementById('bgmHeroRibbonLabel');
+  if(label) label.textContent=language==='ar'?'✨ أبطال BGM':'✨ BGM HEROES';
+  const makeNames=()=>bgmHeroFeedNames.map(name=>{
+    const span=document.createElement('span');
+    span.className='bgm-hero-ribbon-name';
+    span.textContent=name;
+    return span;
+  });
+  track.replaceChildren(...makeNames(),...makeNames());
+  ribbon.classList.add('has-names');
+}
+function loadBgmHeroRibbon(){
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(BGM_SURVEY_ENDPOINT)) return;
+  const old=document.getElementById('bgmHeroFeedScript');
+  if(old) old.remove();
+  const script=document.createElement('script');
+  script.id='bgmHeroFeedScript';
+  script.src=BGM_SURVEY_ENDPOINT+'?action=heroes&callback=bgmHeroFeedCallback&_='+Date.now();
+  script.onerror=()=>{};
+  document.head.appendChild(script);
+}
+loadBgmHeroRibbon();
+window.setInterval(loadBgmHeroRibbon,BGM_HERO_FEED_POLL_MS);
+
 function openBgmSurvey(){stopQuickfire();document.body.classList.remove('deck-open','quest-open','bgm-game-open','bgm-checkin-open');document.body.classList.add('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=false;document.getElementById('bgmCheckinPanel').hidden=true;document.getElementById('bgmSurveyStatus').textContent='';document.getElementById('bgmSurveySetup').hidden=/^https:\/\/script\.google\.com\/macros\/s\//.test(BGM_SURVEY_ENDPOINT);showBgmSurveyStep(0);document.getElementById('bgmSurveyPanel').scrollIntoView({behavior:'smooth',block:'start'});}
 function closeBgmSurvey(){document.body.classList.remove('bgm-survey-open');document.getElementById('bgmSurveyPanel').hidden=true;showBgmSurveyStep(0);if(selected)document.body.classList.add('deck-open');window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('bgmSurveyDoor').addEventListener('click',openBgmSurvey);
