@@ -70,7 +70,7 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-survey-panel[hidden]{display:none!important}
 /* Survey and check-in are exclusive views. Hidden panels must stay hidden. */
 #bgmSurveyPanel[hidden],
-#bgmCheckinPanel[hidden]{display:none!important}
+#bgmCheckinPanel[hidden],#bgmHeroPanel[hidden]{display:none!important}
 .bgm-survey-open #bgmSurveyPanel:not([hidden]){display:block!important;margin-top:0}
 .bgm-survey-open #bgmCheckinPanel{display:none!important}
 .bgm-survey-open .hero,.bgm-survey-open #sectionLabel,.bgm-survey-open #decks,.bgm-survey-open #miniDecks,.bgm-survey-open #cardWrap,.bgm-survey-open #quickfireBar,.bgm-survey-open #controls,.bgm-survey-open #toast,.bgm-survey-open #footerNote,.bgm-survey-open .quest-panel,.bgm-survey-open .bgm-game-panel{display:none!important}
@@ -78,6 +78,9 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-checkin-open #bgmCheckinPanel:not([hidden]){display:block!important;margin-top:0}
 .bgm-checkin-open #bgmSurveyPanel{display:none!important}
 .bgm-checkin-open .hero,.bgm-checkin-open #sectionLabel,.bgm-checkin-open #decks,.bgm-checkin-open #miniDecks,.bgm-checkin-open #cardWrap,.bgm-checkin-open #quickfireBar,.bgm-checkin-open #controls,.bgm-checkin-open #toast,.bgm-checkin-open #footerNote,.bgm-checkin-open .quest-panel,.bgm-checkin-open .bgm-game-panel{display:none!important}
+.bgm-hero-open #bgmHeroPanel:not([hidden]){display:block!important;margin-top:0}
+.bgm-hero-open #bgmSurveyPanel,.bgm-hero-open #bgmCheckinPanel{display:none!important}
+.bgm-hero-open .hero,.bgm-hero-open #sectionLabel,.bgm-hero-open #decks,.bgm-hero-open #miniDecks,.bgm-hero-open #cardWrap,.bgm-hero-open #quickfireBar,.bgm-hero-open #controls,.bgm-hero-open #toast,.bgm-hero-open #footerNote,.bgm-hero-open .quest-panel,.bgm-hero-open .bgm-game-panel{display:none!important}
 
 .bgm-survey-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
 .bgm-survey-head h2{font-size:clamp(25px,5vw,36px);margin:8px 0;letter-spacing:-1px}
@@ -432,7 +435,7 @@ body.quest-open .quest-panel{margin-top:0}
 /* Keep the three tiny action artworks in the same row as EN/عربي */
 .top-tools{
   display:grid!important;
-  grid-template-columns:auto repeat(3,clamp(30px,4vw,42px))!important;
+  grid-template-columns:auto repeat(4,clamp(30px,4vw,42px))!important;
   align-items:center!important;
   justify-content:end!important;
   gap:5px!important;
@@ -441,9 +444,10 @@ body.quest-open .quest-panel{margin-top:0}
 .top-tools #bgmGameDoor{grid-column:2!important;grid-row:1!important}
 .top-tools #bgmSurveyDoor{grid-column:3!important;grid-row:1!important}
 .top-tools #bgmCheckinDoor{grid-column:4!important;grid-row:1!important}
+.top-tools #bgmHeroDoor{grid-column:5!important;grid-row:1!important}
 .top-tools .mini-action-card{width:clamp(30px,4vw,42px)!important;min-width:30px!important;aspect-ratio:2 / 3!important}
 @media(max-width:600px){
-  .top-tools{flex:0 0 auto!important;width:auto!important;grid-template-columns:auto repeat(3,30px)!important;gap:4px!important}
+  .top-tools{flex:0 0 auto!important;width:auto!important;grid-template-columns:auto repeat(4,30px)!important;gap:4px!important}
   .top-tools .mini-action-card{width:30px!important;min-width:30px!important}
   .top-tools .language-switch{grid-column:1!important;grid-row:1!important}
   .top-tools #bgmGameDoor{grid-column:2!important;grid-row:1!important}
