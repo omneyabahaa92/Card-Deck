@@ -429,8 +429,26 @@ body.quest-open .quest-panel{margin-top:0}
 .bgm-survey-status.bgm-checkin-thankyou{
   background-image:url("assets/bgm-site-assets/check-in-success.webp")!important;
 }
+/* Keep the three tiny action artworks in the same row as EN/عربي */
+.top-tools{
+  display:grid!important;
+  grid-template-columns:auto repeat(3,clamp(30px,4vw,42px))!important;
+  align-items:center!important;
+  justify-content:end!important;
+  gap:5px!important;
+}
+.top-tools .language-switch{grid-column:1!important;grid-row:1!important;margin:0!important;align-self:center!important}
+.top-tools #bgmGameDoor{grid-column:2!important;grid-row:1!important}
+.top-tools #bgmSurveyDoor{grid-column:3!important;grid-row:1!important}
+.top-tools #bgmCheckinDoor{grid-column:4!important;grid-row:1!important}
+.top-tools .mini-action-card{width:clamp(30px,4vw,42px)!important;min-width:30px!important;aspect-ratio:2 / 3!important}
 @media(max-width:600px){
-  .top-tools .mini-action-card{width:clamp(42px,11vw,52px)!important;min-width:42px!important}
+  .top-tools{flex:0 0 auto!important;width:auto!important;grid-template-columns:auto repeat(3,30px)!important;gap:4px!important}
+  .top-tools .mini-action-card{width:30px!important;min-width:30px!important}
+  .top-tools .language-switch{grid-column:1!important;grid-row:1!important}
+  .top-tools #bgmGameDoor{grid-column:2!important;grid-row:1!important}
+  .top-tools #bgmSurveyDoor{grid-column:3!important;grid-row:1!important}
+  .top-tools #bgmCheckinDoor{grid-column:4!important;grid-row:1!important}
   .bgm-survey-status.bgm-thankyou-card{aspect-ratio:3 / 2!important}
 }
 
